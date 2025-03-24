@@ -3,7 +3,12 @@
 
 ## Configuration & Dependencies
 - Install [node.js](https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi)
-- npm install
+- Run the following commands
+
+```bash
+cd frontend
+npm install
+```
 
 
 - Copy the .env file in the folder ```backend/dotent template``` to the root of the backend folder. Then update the DB_PASS field to your actual MySQL root user password.
