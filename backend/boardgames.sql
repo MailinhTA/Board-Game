@@ -80,10 +80,10 @@ CREATE TABLE games (
     owned INT,
     trading INT,
     wanting INT,
-    wishing INT,
-    CONSTRAINT valid_players CHECK (minplayers <= maxplayers),
-    CONSTRAINT valid_playtime CHECK (minplaytime <= maxplaytime),
-    CONSTRAINT valid_ratings CHECK (average_rating BETWEEN 1.00 AND 10.00)
+    wishing INT -- ,
+    -- CONSTRAINT valid_players CHECK (minplayers <= maxplayers),
+    -- CONSTRAINT valid_playtime CHECK (minplaytime <= maxplaytime),
+    -- CONSTRAINT valid_ratings CHECK (average_rating BETWEEN 1.00 AND 10.00)
 );
 
 -- Create junction tables for many-to-many relationships
