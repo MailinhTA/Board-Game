@@ -11,7 +11,7 @@ npm install
 ```
 
 
-- Copy the .env file in the folder ```backend/dotent template``` to the root of the backend folder. Then update the DB_PASS field to your actual MySQL root user password.
+- Copy the .env file in the folder ```backend/!dotenv-template``` to the root of the ```backend``` folder. Then update the ```DB_PASS``` field to your actual MySQL root user password.
 
 
 ## How to run
