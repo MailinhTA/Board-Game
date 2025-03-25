@@ -31,7 +31,7 @@ app.use(session({
 
 // enable Cross Origin Resource Sharing (needed for cross-origin API)
 const cors = require('cors');
-app.use(cors({ origin: "http://localhost:8080", credentials: true, methods: [ 'GET', 'POST' ] })); 
+app.use(cors({ origin: "http://localhost:8080", credentials: true, methods: [ 'GET'] })); //, 'POST' ] })); 
 
 
 
@@ -49,4 +49,4 @@ app.get('/', (request, response) => { // 'GET' or 'POST'...
 // app.use(routeBase, callback);
 
 app.use("/static", express.static(__dirname + '/static'));
-//app.use("/api/books", require("./controllers/booksapi.route"));
+app.use("/api/games", require("./controllers/gamesapi.route"));
