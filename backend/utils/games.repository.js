@@ -42,5 +42,18 @@ module.exports = {
             console.log(err);
             throw err;
         }
+    },
+
+    async getGamePage(page, pageSize) {
+        try {
+            let sql = "CALL get_games_page(?, ?)";
+            const [rows, fields] = await pool.execute(sql, [page, pageSize]);
+            console.log("Games FETCHED: " + rows[0].length);
+            return rows;
+            
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 };
