@@ -1,13 +1,21 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <AppHeader />
+    <router-view/>   <!-- This is where your pages/components will be rendered -->
+    <AppFooter />
   </div>
 </template>
 
 <script>
+import AppHeader from './components/Header.vue';  // Import the header component
+import AppFooter from './components/Footer.vue';  // Import the footer component
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {   // Register the components so they can be used in the template
+    AppHeader,
+    AppFooter
+  }
 }
 </script>
 
@@ -18,6 +26,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
