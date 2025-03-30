@@ -27,4 +27,8 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.zoom-hover:hover {
+    transform: scale(1.1);
+    transition: transform 0.1s;
+  }
 </style>

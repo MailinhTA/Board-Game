@@ -21,14 +21,67 @@
     <div  v-if="action === 'list'">   <!-- v-if is a conditional rendering -->
       <h1 class="component-h1">Game List</h1>
 
+      <ul class="games-list">
+        <li v-for="game of gameArray" v-bind:key="game.id" class="zoom-hover">
+          <a :href="'/#/games/show/' + game.id">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="3">
+                      {{ game.primary_name }}<br/>
+                      <i><small>{{ game.yearpublished }}</small></i>
+                  </th>
+                </tr>
+                <tr>
+                  <th colspan="3">
+                      <img v-bind:src="game.thumbnail" alt="game thumbnail">
+                  </th>
+                </tr>
+              </thead>
 
-      <ul class="book-list">
-        <li v-for="game of gameArray" v-bind:key="game.id">
-            {{ game.primary_name }}, {{ game.id }}
-            <!-- the src of the img will be the field game.thumbnail of the game object-->
-            <img v-bind:src="game.thumbnail" alt="game thumbnail">
+              <!--
+              <tbody>
+                <tr>
+                  <td>
+                    Wanting
+                  </td>
+                  <td>
+                    Trading
+                  </td>
+                  <td>
+                    Wishlisted
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {{ game.wanting }}
+                  </td>
+                  <td>
+                    {{ game.trading }} / {{ game.owned }}
+                  </td>
+                  <td>
+                    {{ game.wishing }}
+                  </td>
+                </tr>
+              </tbody>
+              -->
+            </table>
+          </a>
         </li>
       </ul>
+
+
+      <!-- Page selector -->
+      <div class="pagination" style="margin-top: 20px; text-align: center;">
+        <button @click="pageNumber = pageNumber - 1" :disabled="pageNumber <= 1">Previous</button>
+        <span>Page
+          <!--<input type="number" v-model="pageNumber" min="1" :max="Math.ceil(gameArray.length / pageSize)" style="width: 50px; text-align: center;"/> of {{ Math.ceil(gameArray.length / pageSize) }}-->
+          <input type="number" v-model="pageNumber" min="1" />
+        </span>
+        <button @click="pageNumber = pageNumber + 1" :disabled="gameArray.length < pageSize">Next</button>
+      </div>
+
+
     </div>
 
   </div>
@@ -44,6 +97,9 @@ export default {
   data() {
     return {   // variables that can be used in the template
       //user_role: 'GUEST',
+      pageNumber: 1,
+      pageSize: 30,
+
       gameArray: [],
       libraryArray: [],
 
@@ -74,9 +130,9 @@ export default {
 
   methods: {   // logic that can be called from the template
 
-    async getAllData() {
+    async getAllData(pageNumber, pageSize) {
       try {
-        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/2/30');
+        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize);
         this.gameArray = await responseGames.data[0];
 
       } catch (exception) {
@@ -183,16 +239,25 @@ export default {
     id: function(newId, oldId) {
       //this.refreshcurrentGame();
     },
+
     action: function(newAction, oldAction) {
       if (newAction === 'list') {
-        this.getAllData();
+        this.getAllData(this.pageNumber, this.pageSize);
       }
+    },
+
+    pageNumber: function(newPageNumber, oldPageNumber) {
+      this.getAllData(this.pageNumber, this.pageSize);
+    },
+
+    pageSize: function(newPageSize, oldPageSize) {
+      this.getAllData(this.pageNumber, this.pageSize);
     }
   },
 
   created() {   // executed when the component is created
     //this.getUserRole();
-    this.getAllData();
+    this.getAllData(this.pageNumber, this.pageSize);
     //this.refreshcurrentGame();
   }
 };
@@ -220,6 +285,49 @@ export default {
   }
 
 
+  /************ GAMES LIST ************/
+  .games-list {
+    margin: auto; /* Center the ul element */
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 1300px;
+    list-style-type: none; /* Remove dots */
+  }
+
+  .games-list li {
+    margin: 0 20px 20px;
+    text-align: center;
+    position: relative;
+    max-width: 200px;
+  }
+  
+  .games-list li img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .games-list tbody {
+    text-align: center;
+    font-size: 0.8em;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* space between the buttons */
+    gap: 10px;
+  }
+
+  .pagination input[type="number"] {
+    width: 50px;
+    text-align: center;
+  }
   
 
 </style>
