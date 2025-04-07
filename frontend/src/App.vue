@@ -49,4 +49,8 @@ export default {
   button:hover, input[type="button"]:hover {
     background-color: #45a049;
   }
+  button:disabled, input[type="button"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 </style>
