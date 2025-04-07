@@ -77,6 +77,7 @@
         <span>Page
           <!--<input type="number" v-model="pageNumber" min="1" :max="Math.ceil(gameArray.length / pageSize)" style="width: 50px; text-align: center;"/> of {{ Math.ceil(gameArray.length / pageSize) }}-->
           <input type="number" v-model="pageNumber" min="1" />
+          / {{ numberOfPages }}
         </span>
         <button @click="pageNumber = pageNumber + 1" :disabled="gameArray.length < pageSize">Next</button>
       </div>
@@ -99,6 +100,7 @@ export default {
       //user_role: 'GUEST',
       pageNumber: 1,
       pageSize: 30,
+      numberOfPages: 0,
 
       gameArray: [],
       libraryArray: [],
@@ -133,8 +135,17 @@ export default {
     async getAllData(pageNumber, pageSize) {
       try {
         let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize);
-        this.gameArray = await responseGames.data[0];
+        this.gameArray = await responseGames.data;
 
+      } catch (exception) {
+        console.log(exception);
+      }
+    },
+
+    async getNumberOfPages() {
+      try {
+        let response = await this.$http.get('http://localhost:9000/api/games/total/pages/' + this.pageSize);
+        return response.data;
       } catch (exception) {
         console.log(exception);
       }
@@ -258,6 +269,9 @@ export default {
   created() {   // executed when the component is created
     //this.getUserRole();
     this.getAllData(this.pageNumber, this.pageSize);
+    this.getNumberOfPages().then((numberOfPages) => {
+      this.numberOfPages = numberOfPages;
+    });
     //this.refreshcurrentGame();
   }
 };
