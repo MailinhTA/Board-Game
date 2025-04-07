@@ -82,5 +82,18 @@ module.exports = {
             console.log(err);
             throw err;
         }
+    },
+
+    async getGameById(id) {
+        try {
+            let sql = "CALL get_game_by_id(?)";
+            const [rows, fields] = await pool.execute(sql, [id]);
+            console.log("Game FETCHED of ID: " + id);
+            return rows;
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 };

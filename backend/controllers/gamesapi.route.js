@@ -4,8 +4,11 @@ const gamesRepo = require('../utils/games.repository');
 
 router.get('/list', gamesListAction); //Works
 router.get('/page/:page/:pageSize', gamesPageAction); //Works
+
 router.get('/total/games', totalGamesAction);
 router.get('/total/pages/:pageSize', totalPagesAction); //Works
+
+router.get('/:id', getGameByIdAction);
 
 
 async function gamesListAction(request, response) {
@@ -31,5 +34,10 @@ async function totalPagesAction(request, response) {
     response.send(JSON.stringify(total));
 }
 
+async function getGameByIdAction(request, response) {
+    var id = request.params.id;
+    var game = await gamesRepo.getGameById(id);
+    response.send(JSON.stringify(game));
+}
 
 module.exports = router;
