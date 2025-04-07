@@ -73,13 +73,13 @@
 
       <!-- Page selector -->
       <div class="pagination" style="margin-top: 20px; text-align: center;">
-        <button @click="pageNumber = pageNumber - 1" :disabled="pageNumber <= 1">Previous</button>
+        <button @click="pageNumber = Number(pageNumber) - 1" :disabled="pageNumber <= 1">Previous</button>
         <span>Page
           <!--<input type="number" v-model="pageNumber" min="1" :max="Math.ceil(gameArray.length / pageSize)" style="width: 50px; text-align: center;"/> of {{ Math.ceil(gameArray.length / pageSize) }}-->
           <input type="number" v-model="pageNumber" min="1" />
           / {{ numberOfPages }}
         </span>
-        <button @click="pageNumber = pageNumber + 1" :disabled="gameArray.length < pageSize">Next</button>
+        <button @click="pageNumber = Number(pageNumber) + 1" :disabled="pageNumber >= numberOfPages">Next</button>
       </div>
 
 
