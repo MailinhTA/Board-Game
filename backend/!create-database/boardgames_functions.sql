@@ -1,4 +1,7 @@
+USE  boardgames;
+
 -- Create a stored function to get a page of games
+DROP FUNCTION IF EXISTS get_page_start;
 DELIMITER //
 
 CREATE FUNCTION get_page_start(page INT, page_size INT) 
@@ -11,6 +14,7 @@ DELIMITER ;
 -- SELECT * FROM games LIMIT get_page_start(2, 10), 10;  -- Gets page 2 with 10 items per page
 
 -- Stored procedure to return the full result set
+DROP PROCEDURE IF EXISTS get_games_page;
 DELIMITER //
 
 CREATE PROCEDURE get_games_page(IN page_num INT, IN items_per_page INT)
@@ -30,6 +34,7 @@ DELIMITER ;
 
 
 -- Create a function to get the total number of games
+DROP FUNCTION IF EXISTS get_total_games;
 DELIMITER //
 
 CREATE FUNCTION get_total_games() 
@@ -46,6 +51,7 @@ DELIMITER ;
 
 
 -- Create a procedure to get a specific game by id with all its related information
+DROP PROCEDURE IF EXISTS get_game_by_id;
 DELIMITER //
 
 CREATE PROCEDURE get_game_by_id(IN game_id INT)
