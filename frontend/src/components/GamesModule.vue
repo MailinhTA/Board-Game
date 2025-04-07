@@ -2,8 +2,132 @@
   <div>
 
     <div v-if="action === 'show'">
-      <h1 class="component-h1">{{ currentGame.primary_name }}</h1>
+      <h1>{{ currentGame[0][0].primary_name }}, {{ currentGame[0][0].yearpublished }}</h1>
 
+
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <th colspan="2">
+            Game Details
+          </th>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td rowspan="5">
+              <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail" width="100px">
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Play info:</strong><br/>
+              Duration: {{ currentGame[0][0].playingtime }} min<br/>
+              Min Age: {{ currentGame[0][0].minage }}<br/>
+              Play Time: {{ currentGame[0][0].minplaytime }} min - {{ currentGame[0][0].maxplaytime }} max<br/>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Ranking:</strong>
+              <ul>
+                <li>BGG Rank: {{ currentGame[0][0].bgg_rank }}</li>
+                <li>Average Rating: {{ currentGame[0][0].average_rating }}</li>
+                <li>Bayes Average: {{ currentGame[0][0].bayes_average }}</li>
+                <li>Users Rated: {{ currentGame[0][0].users_rated }}</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Game Description:</strong><br/>
+              {{ currentGame[0][0].description }}
+            </td>
+          </tr>
+
+
+        </tbody>
+
+
+      </table>
+
+
+      <!-- show image -->
+      <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail">
+
+      <p>
+      </p>
+
+      <!-- display number of players -->
+      <p>
+        <strong>Number of Players:</strong><br/>
+        {{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}
+      </p>
+
+    
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <th colspan="2">
+            Game Details
+          </th>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><strong>Game ID:</strong></td>
+            <td>{{ currentGame[0][0].id }}</td>
+          </tr>
+          <tr>
+            <td><strong>Year Published:</strong></td>
+            <td>{{ currentGame[0][0].yearpublished }}</td>
+          </tr>
+          <tr>
+            <td><strong>Average Rating:</strong></td>
+            <td>{{ currentGame[0][0].average_rating }}</td>
+          </tr>
+          <tr>
+            <td><strong>Bayes Average:</strong></td>
+            <td>{{ currentGame[0][0].bayes_average }}</td>
+          </tr>
+          <tr>
+            <td><strong>BGG Rank:</strong></td>
+            <td>{{ currentGame[0][0].bgg_rank }}</td>
+          </tr>
+          <tr>
+            <td><strong>Users Rated:</strong></td>
+            <td>{{ currentGame[0][0].users_rated }}</td>
+          </tr>
+          <tr>
+            <td><strong>Playing Time:</strong></td>
+            <td>{{ currentGame[0][0].playingtime }}</td>
+          </tr>
+          <tr>
+            <td><strong>Min Players:</strong></td>
+            <td>{{ currentGame[0][0].minplayers }}</td>
+          </tr>
+          <tr>
+            <td><strong>Max Players:</strong></td>
+            <td>{{ currentGame[0][0].maxplayers }}</td>
+          </tr>
+          <tr>
+            <td><strong>Min Age:</strong></td>
+            <td>{{ currentGame[0][0].minage }}</td>
+          </tr>
+          <tr>
+            <td><strong>Min Play Time:</strong></td>
+            <td>{{ currentGame[0][0].minplaytime }}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <table class="table table-striped table-bordered table-hover">
+        <tbody>
+          <tr v-for="list of currentGame">
+            {{ list }}
+          </tr>
+        </tbody>
+      </table>
+
+
+      {{ currentGame }}
       </br>
 
     </div>
@@ -106,6 +230,9 @@ export default {
       libraryArray: [],
 
       currentGame: {
+        /*[0] is game
+        */
+        /*
         id: 0,
         primary_name: "xxx",
         description: "xxx",
@@ -125,7 +252,7 @@ export default {
         owned: 0,
         trading: 0,
         wanting: 0,
-        wishing: 0
+        wishing: 0*/
       }
     };
   },
@@ -152,35 +279,43 @@ export default {
     },
 
 
-    /*
     async refreshcurrentGame() {
       if (this.$props.id === "all" || this.$props.id === "0") {
         this.currentGame = {
-          book_id: 0,
-          book_name: 'Book Name',
-          book_author: 'Book Author',
-          book_description: 'Description...',
-          book_publicationDate: '2000-01-01',
-          book_isbn: '9780000000000',
-          book_imageFileName: 'default-cover.jpg'
+          /*
+          id: 0,
+          primary_name: "xxx",
+          description: "xxx",
+          yearpublished: 0,
+          minplayers: 0,
+          maxplayers: 0,
+          playingtime: 0,
+          minplaytime: 0,
+          maxplaytime: 0,
+          minage: 0,
+          bgg_rank: 0,
+          average_rating: 0.00,
+          bayes_average: 0.000,
+          users_rated : 0,
+          url: "xxx",
+          thumbnail: "xxx",
+          owned: 0,
+          trading: 0,
+          wanting: 0,
+          wishing: 0*/
         };
         return;
       }
       try {
-        let responseBook = await this.$http.get("http://localhost:9000/api/books/show/" + this.$props.id);
-        this.currentGame = responseBook.data;
-
-        let responseLibraries = await this.$http.get("http://localhost:9000/api/books/listlibraries/" + this.$props.id);
-        this.libraryArray = responseLibraries.data;
+        let responseGame = await this.$http.get("http://localhost:9000/api/games/" + this.$props.id);
+        this.currentGame = responseGame.data;
 
       } catch (ex) {
         console.log(ex);
       }
-
-      // for testing purposes
-      //this.currentGame = this.bookArray.find(b => b.book_id === Number(this.$props.id));   // or String(b.book_id)
     },
 
+    /*
     async sendDeleteRequest(book_id) {
       try {
         alert("DELETING BOOK #" + book_id + "...");
@@ -248,7 +383,7 @@ export default {
 
   watch: {   // watch for changes in the variables
     id: function(newId, oldId) {
-      //this.refreshcurrentGame();
+      this.refreshcurrentGame();
     },
 
     action: function(newAction, oldAction) {
@@ -272,7 +407,7 @@ export default {
     this.getNumberOfPages().then((numberOfPages) => {
       this.numberOfPages = numberOfPages;
     });
-    //this.refreshcurrentGame();
+    this.refreshcurrentGame();
   }
 };
 </script>
@@ -330,6 +465,7 @@ export default {
     font-size: 0.8em;
   }
 
+  /************ Pagination ************/
   .pagination {
     display: flex;
     justify-content: center;
@@ -341,6 +477,12 @@ export default {
   .pagination input[type="number"] {
     width: 70px;
     text-align: center;
+  }
+
+  table {
+    width: 80%;
+    /* center the table */
+    margin: 20px auto;
   }
   
 
