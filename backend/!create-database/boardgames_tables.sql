@@ -179,39 +179,3 @@ CREATE INDEX idx_game_rank ON games(bgg_rank);
 CREATE INDEX idx_game_players ON games(minplayers, maxplayers);
 CREATE INDEX idx_game_playtime ON games(playingtime);
 CREATE INDEX idx_game_users_rated ON games(users_rated DESC);
-
-
-
-
-
-
-
-
-
--- Create a stored function to get a page of games
-DELIMITER //
-
-CREATE FUNCTION get_page_start(page INT, page_size INT) 
-RETURNS INT DETERMINISTIC
-BEGIN
-    RETURN (page - 1) * page_size;
-END //
-
-DELIMITER ;
--- SELECT * FROM games LIMIT get_page_start(2, 10), 10;  -- Gets page 2 with 10 items per page
-
--- Stored procedure to return the full result set
-DELIMITER //
-
-CREATE PROCEDURE get_games_page(IN page_num INT, IN items_per_page INT)
-BEGIN
-    DECLARE offset_val INT;
-    SET offset_val = (page_num - 1) * items_per_page;
-    
-    SELECT * FROM games 
-    ORDER BY id
-    LIMIT offset_val, items_per_page;
-END //
-
-DELIMITER ;
--- CALL get_games_page(2, 10);  -- Gets page 2 with 10 items per page
