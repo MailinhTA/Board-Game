@@ -8,8 +8,9 @@
           </a>
         </li>
         <li class="zoom-hover">
-          <a href="#/books/list/all/" @click="getUserRole()"> Games</a>
+          <a href="#/games/list/all/" @click="getUserRole()"> Games</a>
         </li>
+        <!--
         <li class="zoom-hover">
           <a href="#/libraries/list/all" @click="getUserRole()"> Libraries</a>
         </li>
@@ -24,7 +25,7 @@
         </li>
         <li class="zoom-hover">
           <a href="#/statistics"> Statistics</a>
-        </li>
+        </li>-->
       </ul>
 
       <ul @mouseover="active = true" @mouseleave="active = false" >
