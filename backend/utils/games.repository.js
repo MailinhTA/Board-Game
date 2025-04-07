@@ -49,9 +49,36 @@ module.exports = {
             let sql = "CALL get_games_page(?, ?)";
             const [rows, fields] = await pool.execute(sql, [page, pageSize]);
             console.log("Games FETCHED: " + rows[0].length);
-            return rows;
+            return rows[0];
             
         } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    async getTotalGames() {
+        try {
+            let sql = "SELECT get_total_games()";
+            const [rows, fields] = await pool.execute(sql);
+            console.log("NUMBER of games: " + rows[0]['get_total_games()']);
+            return rows[0]['get_total_games()'];
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    async getTotalPages(pageSize) {
+        try {
+            let sql = "SELECT get_total_games()";
+            const [rows, fields] = await pool.execute(sql);
+            let pageNumber = Math.ceil(rows[0]['get_total_games()'] / pageSize);
+            console.log("NUMBER of pages: " + pageNumber);
+            return pageNumber;
+        }
+        catch (err) {
             console.log(err);
             throw err;
         }
