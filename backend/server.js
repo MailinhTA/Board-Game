@@ -34,6 +34,10 @@ const cors = require('cors');
 app.use(cors({ origin: "http://localhost:8080", credentials: true, methods: [ 'GET'] })); //, 'POST' ] })); 
 
 
+// configure passport
+const auth = require("./utils/user.auth");
+auth.initializeAuthentications(app);
+app.use("/auth", require("./controllers/auth.route"));
 
 
 // *** ROUTES/CONTROLLERS ***
@@ -50,3 +54,5 @@ app.get('/', (request, response) => { // 'GET' or 'POST'...
 
 app.use("/static", express.static(__dirname + '/static'));
 app.use("/api/games", require("./controllers/gamesapi.route"));
+app.use("/api/users", require("./controllers/user.route"));
+app.use("/api/auth", require("./controllers/auth.route"));
