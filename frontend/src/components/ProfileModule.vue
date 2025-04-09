@@ -1,16 +1,19 @@
 <template>
   <div>
 
+    {{ this.role }}
+
     <div v-if="action === 'myprofile'">
       <!-- If the user is not logged in -->
-      <div v-if="currentUser.user_id === 0">
+      <div v-if="this.role === 'GUEST'">
         <h1 class="component-h1">You don't have a profile yet?</h1>
         <a href="#/profile/register">Click here</a> to create your profile.
         <br><br><br><br><br><br><br><br><br><br><br><br>
       </div>
 
       <!-- If the user is logged in -->
-      <div v-if="currentUser.user_id !== 0">
+      <div v-if="this.role !== 'GUEST'">
+        {{ currentUser }}
         <h1 class="component-h1">Your Profile, {{currentUser.user_name}}</h1>
         <div class="show-user">
             <table class="table table-striped table-bordered">
@@ -146,7 +149,7 @@
     data() {
         return {
             role: '',
-            //bookArray: [],
+            bookArray: [],
             currentUser: {
                 user_id: 0,
                 user_name: '',
@@ -163,12 +166,28 @@
         this.sendRequest('post', 'login', { username: username, userpass: password });
       },
 
+      async getUserRole() {
+        try {
+          let response = await this.$http.get("http://localhost:9000/api/auth/role");
+          this.role = response.data;
+          // Call refreshCurrentUser after role is updated
+          if (this.role !== 'GUEST') {
+            await this.refreshCurrentUser();
+          }
+        } catch (ex) {
+          console.log(ex);
+        }
+      },
+
       async refreshCurrentUser() {
         try {
-          let response = await this.$http.get("http://localhost:9000/api/auth/"+this.role.toLowerCase());
-          this.currentUser = response.data;
-          //response = await this.$http.get("http://localhost:9000/api/borrow/userbooks/"+this.currentUser.user_id);
-          //this.bookArray = response.data;
+          if (this.role && this.role !== 'GUEST') {
+            let response = await this.$http.get("http://localhost:9000/api/auth/"+this.role.toLowerCase());
+            this.currentUser = response.data;
+            // Uncomment and fix this if you want to load borrowed books
+            // response = await this.$http.get("http://localhost:9000/api/borrow/userbooks/"+this.currentUser.user_id);
+            // this.bookArray = response.data;
+          }
         } catch (error) {
           console.log(error);
         }
@@ -204,41 +223,55 @@
         }
       },
 
-      async sendEditRequest() {
+      async sendRequest(method, endpoint, params) {
+        let errorDiv = document.createElement("div");
         try {
-            let response = await this.$http.post("http://localhost:9000/api/users/update/" + this.currentUser.user_id, {
-                user_name: this.currentUser.user_name,
-                user_email: this.currentUser.user_email,
-                user_password: this.currentUser.user_password,
-                user_role: "USER"
-            });
+          let response = null;
+          if (method === "post") 
+            response = await this.$http.post("http://localhost:9000/api/auth/"+endpoint, params);
+          else
+            response = await this.$http.get("http://localhost:9000/api/auth/"+endpoint);
+          
+          this.role = response.data.userRole;
+          if (response.data.loginResult) {
+            await this.refreshCurrentUser(); // Make sure user data is refreshed after login
+            errorDiv.innerHTML = "Login successful";
+            this.$router.push('/profile/myprofile');
+          }
+          else
+            errorDiv.innerHTML = "Wrong username or password";
+          errorDiv.style.color = "red";
+          document.getElementById("edit-error").appendChild(errorDiv);
 
-            let errorDiv = document.createElement("div");
-            errorDiv.innerHTML = "Profile successfully created. You can now login";
-            errorDiv.style.color = "red";
-            document.getElementById("edit-error").appendChild(errorDiv);
-        } catch (error) {
-            console.log(error);
-            let errorDiv = document.createElement("div");
-            errorDiv.innerHTML = "Someone with that username/email already exists";
-            errorDiv.style.color = "red";
-            document.getElementById("edit-error").appendChild(errorDiv);
+        } catch (error) { // Fixed variable name from 'ex' to 'error'
+          console.log(error);
+          errorDiv.innerHTML = "Wrong username or password";
+          errorDiv.style.color = "red";
+          document.getElementById("edit-error").appendChild(errorDiv);
         }
-      }
+      },
     },
 
     watch: {
+
+      // if logout, call getUserRole 
       id: function(newId, oldId) {
-        this.refreshCurrentLibrary();
+        if (newRole !== 'GUEST') {
+          this.refreshCurrentUser();
+        }
       },
       action: function(newAction, oldAction) {
-        // remove the error message
         if (newAction === "myprofile") {
-          this.refreshCurrentUser();
+          this.getUserRole(); // Call getUserRole instead of refreshCurrentUser directly
         }
         else
           document.getElementById("edit-error").innerHTML = "";
       }
+
+    },
+
+    created() {
+      this.getUserRole(); // This will also call refreshCurrentUser when complete
     }
   }
 </script>
