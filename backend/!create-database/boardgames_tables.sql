@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS artists;
 DROP TABLE IF EXISTS game_designers;
 DROP TABLE IF EXISTS designers;
 DROP TABLE IF EXISTS games;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS game_ratings;
 
 -- Create tables with appropriate data types and constraints
 
@@ -175,7 +177,6 @@ CREATE TABLE game_implementations (
 
 
 
-DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(100) NOT NULL,
@@ -199,7 +200,128 @@ CREATE INDEX idx_game_playtime ON games(playingtime);
 CREATE INDEX idx_game_users_rated ON games(users_rated DESC);
 
 
--- Create triggers on rank and rating changes
+
+
+-- Create a rating history table for logging
+CREATE TABLE game_ratings (
+    rating_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    game_id INT NOT NULL,
+    rating DECIMAL(3,1) NOT NULL,
+    rating_comment TEXT,
+    rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
+    -- cascade delete means if a user is deleted, their ratings are also deleted
+    CONSTRAINT valid_rating CHECK (rating BETWEEN 1.0 AND 10.0),
+    UNIQUE KEY unique_user_game_rating (user_id, game_id)
+);
+
+
+
+-- Stored procedure to add or update a game rating
+DROP PROCEDURE IF EXISTS add_game_rating;
+DELIMITER //
+CREATE PROCEDURE add_game_rating(
+    IN p_user_id INT,
+    IN p_game_id INT,
+    IN p_rating DECIMAL(3,1),
+    IN p_comment TEXT
+)
+BEGIN
+    -- Check if the user has already rated this game
+    DECLARE rating_exists INT;
+    
+    SELECT COUNT(*) INTO rating_exists
+    FROM game_ratings
+    WHERE user_id = p_user_id AND game_id = p_game_id;
+    
+    IF rating_exists > 0 THEN
+        -- Update existing rating
+        UPDATE game_ratings
+        SET rating = p_rating,
+            rating_comment = p_comment,
+            rating_date = CURRENT_TIMESTAMP
+        WHERE user_id = p_user_id AND game_id = p_game_id;
+    ELSE
+        -- Insert new rating
+        INSERT INTO game_ratings (user_id, game_id, rating, rating_comment)
+        VALUES (p_user_id, p_game_id, p_rating, p_comment);
+    END IF;
+END//
+
+DELIMITER ;
+
+-- CALL add_game_rating(1, 1, 8.5, 'Great game!'); -- call the procedure to add a rating
+
+
+
+
+
+
+
+-- Trigger to update games table when a rating is added
+DROP TRIGGER IF EXISTS after_game_rating_insert;
+DELIMITER //
+CREATE TRIGGER after_game_rating_insert 
+AFTER INSERT ON game_ratings
+FOR EACH ROW
+BEGIN
+    -- Update average_rating and users_rated in games table
+    UPDATE games
+    SET 
+        users_rated = users_rated + 1,
+        average_rating = (
+            SELECT AVG(rating) 
+            FROM game_ratings 
+            WHERE game_id = NEW.game_id
+        )
+    WHERE id = NEW.game_id;
+END//
+DELIMITER ;
+
+-- Trigger to update games table when a rating is updated
+DROP TRIGGER IF EXISTS after_game_rating_update;
+DELIMITER //
+CREATE TRIGGER after_game_rating_update
+AFTER UPDATE ON game_ratings
+FOR EACH ROW
+BEGIN
+    -- Update average_rating in games table (users_rated doesn't change on update)
+    UPDATE games
+    SET 
+        average_rating = (
+            SELECT AVG(rating) 
+            FROM game_ratings 
+            WHERE game_id = NEW.game_id
+        )
+    WHERE id = NEW.game_id;
+END//
+DELIMITER ;
+
+-- Trigger to update games table when a rating is deleted
+DROP TRIGGER IF EXISTS after_game_rating_delete;
+DELIMITER //
+CREATE TRIGGER after_game_rating_delete
+AFTER DELETE ON game_ratings
+FOR EACH ROW
+BEGIN
+    -- Decrement users_rated and update average_rating
+    UPDATE games
+    SET 
+        users_rated = GREATEST(users_rated - 1, 0),
+        average_rating = (
+            SELECT COALESCE(AVG(rating), 0)
+            FROM game_ratings 
+            WHERE game_id = OLD.game_id
+        )
+    WHERE id = OLD.game_id;
+END//
+DELIMITER ;
+
+
+
+
 
 
 INSERT INTO users (user_name, user_email, user_password, user_created, user_role) VALUES
