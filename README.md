@@ -1,7 +1,7 @@
 # Board-Game
 
 
-## Configuration & Dependencies
+## Configuration
 - Install [node.js](https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi)
 - Run the following commands
 
@@ -11,7 +11,7 @@ npm install
 ```
 
 - Run the sql script ```boardgames.sql``` to create the tables and the stored functions / procedures.
-- Run the python script ```fill-database.py``` to populate the MySQL database with the csv data. You will need to modify the 2 following lines in the python code: 
+- Run the python script ```fill-database.py``` to populate the MySQL database with the csv data. You will need to modify the 2 following lines in the python code (do not push the file with your updated info): 
   - ```path_before_file = 'C:/Users/.../Board-Game/backend/'```
   - ```'password': 'INSERT_PASS_HERE',```
 
@@ -30,3 +30,8 @@ npm run dev
 ```bash
 node server.js
 ```
+
+
+## To Do
+
+- add a table for ratings / comments with a trigger so that each time someone ranks a game, an entry in this table is added (Done?)
