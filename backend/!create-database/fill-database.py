@@ -5,13 +5,13 @@ from collections import defaultdict
 import mysql.connector
 
 #path_before_file = ''
-path_before_file = 'C:/Users/.../Board-Game/backend/'   # if the relative path doesn't work, use the absolute path
+path_before_file = 'C:/Users/.../Board-Game/backend/!create-database/'   # if the relative path doesn't work, use the absolute path
 
 # Database connection configuration
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',  # Replace with your MySQL username
-    'password': 'INSERT_PASS_HERE',  # Replace with your MySQL password
+    'password': 'your_MySQL_password',  # Replace with your MySQL password
     'database': 'boardgames'
 }
 
