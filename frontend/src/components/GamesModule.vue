@@ -1,212 +1,220 @@
 <template>
   <div>
 
-    <div v-if="action === 'show'">
-      <h1>{{ currentGame[0][0].primary_name }}, {{ currentGame[0][0].yearpublished }}</h1>
-
-
-      <table class="table table-striped table-bordered table-hover">
-        <thead>
-          <th colspan="2">
-            Game Details
-          </th>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td rowspan="5">
-              <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail" width="100px">
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Play info:</strong><br/>
-              Duration: {{ currentGame[0][0].playingtime }} min<br/>
-              Min Age: {{ currentGame[0][0].minage }}<br/>
-              Play Time: {{ currentGame[0][0].minplaytime }} min - {{ currentGame[0][0].maxplaytime }} max<br/>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Ranking:</strong>
-              <ul>
-                <li>BGG Rank: {{ currentGame[0][0].bgg_rank }}</li>
-                <li>Average Rating: {{ currentGame[0][0].average_rating }}</li>
-                <li>Bayes Average: {{ currentGame[0][0].bayes_average }}</li>
-                <li>Users Rated: {{ currentGame[0][0].users_rated }}</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Game Description:</strong><br/>
-              {{ currentGame[0][0].description }}
-            </td>
-          </tr>
-
-
-        </tbody>
-
-
-      </table>
-
-
-      <!-- show image -->
-      <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail">
-
-      <p>
-      </p>
-
-      <!-- display number of players -->
-      <p>
-        <strong>Number of Players:</strong><br/>
-        {{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}
-      </p>
-
-    
-      <table class="table table-striped table-bordered table-hover">
-        <thead>
-          <th colspan="2">
-            Game Details
-          </th>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td><strong>Game ID:</strong></td>
-            <td>{{ currentGame[0][0].id }}</td>
-          </tr>
-          <tr>
-            <td><strong>Year Published:</strong></td>
-            <td>{{ currentGame[0][0].yearpublished }}</td>
-          </tr>
-          <tr>
-            <td><strong>Average Rating:</strong></td>
-            <td>{{ currentGame[0][0].average_rating }}</td>
-          </tr>
-          <tr>
-            <td><strong>Bayes Average:</strong></td>
-            <td>{{ currentGame[0][0].bayes_average }}</td>
-          </tr>
-          <tr>
-            <td><strong>BGG Rank:</strong></td>
-            <td>{{ currentGame[0][0].bgg_rank }}</td>
-          </tr>
-          <tr>
-            <td><strong>Users Rated:</strong></td>
-            <td>{{ currentGame[0][0].users_rated }}</td>
-          </tr>
-          <tr>
-            <td><strong>Playing Time:</strong></td>
-            <td>{{ currentGame[0][0].playingtime }}</td>
-          </tr>
-          <tr>
-            <td><strong>Min Players:</strong></td>
-            <td>{{ currentGame[0][0].minplayers }}</td>
-          </tr>
-          <tr>
-            <td><strong>Max Players:</strong></td>
-            <td>{{ currentGame[0][0].maxplayers }}</td>
-          </tr>
-          <tr>
-            <td><strong>Min Age:</strong></td>
-            <td>{{ currentGame[0][0].minage }}</td>
-          </tr>
-          <tr>
-            <td><strong>Min Play Time:</strong></td>
-            <td>{{ currentGame[0][0].minplaytime }}</td>
-          </tr>
-
-        </tbody>
-      </table>
-
-      <table class="table table-striped table-bordered table-hover">
-        <tbody>
-          <tr v-for="list of currentGame">
-            {{ list }}
-          </tr>
-        </tbody>
-      </table>
-
-
-      {{ currentGame }}
-      </br>
-
-    </div>
-
-
-    <!--
-    <div v-if="action === 'edit'">
-    </div>
-    -->
-    <!-- v-model is a two-way data-binding, when the input changes, the variable changes too -->
-
-
-
-    <!-- when on: /books/list/all -->
-    <div  v-if="action === 'list'">   <!-- v-if is a conditional rendering -->
-      <h1 class="component-h1">Game List</h1>
-
-      <ul class="games-list">
-        <li v-for="game of gameArray" v-bind:key="game.id" class="zoom-hover">
-          <a :href="'/#/games/show/' + game.id">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th colspan="3">
-                      {{ game.primary_name }}<br/>
-                      <i><small>{{ game.yearpublished }}</small></i>
-                  </th>
-                </tr>
-                <tr>
-                  <th colspan="3">
-                      <img v-bind:src="game.thumbnail" alt="game thumbnail">
-                  </th>
-                </tr>
-              </thead>
-
-              <!--
-              <tbody>
-                <tr>
-                  <td>
-                    Wanting
-                  </td>
-                  <td>
-                    Trading
-                  </td>
-                  <td>
-                    Wishlisted
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    {{ game.wanting }}
-                  </td>
-                  <td>
-                    {{ game.trading }} / {{ game.owned }}
-                  </td>
-                  <td>
-                    {{ game.wishing }}
-                  </td>
-                </tr>
-              </tbody>
-              -->
-            </table>
-          </a>
-        </li>
-      </ul>
-
-
-      <!-- Page selector -->
-      <div class="pagination" style="margin-top: 20px; text-align: center;">
-        <button @click="pageNumber = Number(pageNumber) - 1" :disabled="pageNumber <= 1">Previous</button>
-        <span>Page
-          <!--<input type="number" v-model="pageNumber" min="1" :max="Math.ceil(gameArray.length / pageSize)" style="width: 50px; text-align: center;"/> of {{ Math.ceil(gameArray.length / pageSize) }}-->
-          <input type="number" v-model="pageNumber" min="1" />
-          / {{ numberOfPages }}
-        </span>
-        <button @click="pageNumber = Number(pageNumber) + 1" :disabled="pageNumber >= numberOfPages">Next</button>
+    <div v-if="action === 'show'" class="game-details-container">
+      <div class="game-header">
+        <div class="container">
+          <div class="row align-items-center py-4">
+            <div class="col-md-3 text-center">
+              <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail" class="game-cover-image shadow">
+            </div>
+            <div class="col-md-9">
+              <h1 class="game-title">{{ currentGame[0][0].primary_name }}</h1>
+              <div class="game-year">{{ currentGame[0][0].yearpublished }}</div>
+              <div class="game-meta mt-3">
+                <span class="badge bg-primary me-2">Players: {{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}</span>
+                <span class="badge bg-success me-2">Age: {{ currentGame[0][0].minage }}+</span>
+                <span class="badge bg-info me-2">Time: {{ currentGame[0][0].minplaytime }}-{{ currentGame[0][0].maxplaytime }} min</span>
+                <span class="badge bg-warning text-dark">BGG Rank: #{{ currentGame[0][0].bgg_rank }}</span>
+              </div>
+              <div class="rating-container mt-3">
+                <div class="rating-stars">
+                  <div class="rating-value" :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }"></div>
+                </div>
+                <div class="rating-text">{{ parseFloat(currentGame[0][0].average_rating).toFixed(1) }}/10 
+                  <small class="text-muted">({{ currentGame[0][0].users_rated }} ratings)</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <div class="container mt-4">
+        <div class="row">
+          <!-- Main content column -->
+          <div class="col-lg-8">
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-white">
+                <h4 class="mb-0"><i class="fas fa-book me-2"></i>Description</h4>
+              </div>
+              <div class="card-body">
+                <p class="game-description">{{ currentGame[0][0].description }}</p>
+              </div>
+            </div>
 
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-white">
+                <h4 class="mb-0"><i class="fas fa-gamepad me-2"></i>Game Info</h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <div class="info-label">Players</div>
+                      <div class="info-value">{{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-label">Playing Time</div>
+                      <div class="info-value">{{ currentGame[0][0].playingtime }} minutes</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-label">Age</div>
+                      <div class="info-value">{{ currentGame[0][0].minage }}+</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <div class="info-label">Year Published</div>
+                      <div class="info-value">{{ currentGame[0][0].yearpublished }}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-label">BGG ID</div>
+                      <div class="info-value">{{ currentGame[0][0].id }}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-label">Play Time Range</div>
+                      <div class="info-value">{{ currentGame[0][0].minplaytime }} - {{ currentGame[0][0].maxplaytime }} min</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar column -->
+          <div class="col-lg-4">
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-white">
+                <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Rankings & Stats</h4>
+              </div>
+              <div class="card-body">
+                <div class="stat-item">
+                  <div class="stat-label">BGG Rank</div>
+                  <div class="stat-value">#{{ currentGame[0][0].bgg_rank }}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Average Rating</div>
+                  <div class="stat-value">{{ parseFloat(currentGame[0][0].average_rating).toFixed(2) }}/10</div>
+                  <div class="progress mt-1">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }" 
+                         :aria-valuenow="currentGame[0][0].average_rating * 10" 
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Bayes Average</div>
+                  <div class="stat-value">{{ parseFloat(currentGame[0][0].bayes_average).toFixed(2) }}/10</div>
+                  <div class="progress mt-1">
+                    <div class="progress-bar bg-info" role="progressbar" 
+                         :style="{ width: (currentGame[0][0].bayes_average * 10) + '%' }" 
+                         :aria-valuenow="currentGame[0][0].bayes_average * 10" 
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Users Rated</div>
+                  <div class="stat-value">{{ currentGame[0][0].users_rated }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+              <div class="card-header bg-white">
+                <h4 class="mb-0"><i class="fas fa-link me-2"></i>Quick Actions</h4>
+              </div>
+              <div class="card-body">
+                <a href="#" class="btn btn-outline-primary btn-block mb-2 w-100">
+                  <i class="fas fa-heart me-2"></i>Add to Wishlist
+                </a>
+                <a href="#" class="btn btn-outline-success btn-block mb-2 w-100">
+                  <i class="fas fa-plus-circle me-2"></i>Mark as Owned
+                </a>
+                <a href="#" class="btn btn-outline-info btn-block w-100">
+                  <i class="fas fa-external-link-alt me-2"></i>View on BGG
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 text-center">
+          <a href="/#/games/list" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Games List
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- when on: /games/list/ -->
+    <div v-if="action === 'list'">
+      <div class="list-header bg-light py-4 mb-4">
+        <div class="container">
+          <h1 class="text-center mb-0">Board Game Collection</h1>
+          <p class="text-center text-muted mb-0">Discover amazing games for your next game night</p>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-4" v-for="game of gameArray" v-bind:key="game.id">
+            <div class="card h-100 shadow-sm game-card">
+              <div class="card-header text-center bg-light">
+                <h5 class="card-title mb-0 text-truncate" :title="game.primary_name">{{ game.primary_name }}</h5>
+                <small class="text-muted">{{ game.yearpublished }}</small>
+              </div>
+              <div class="game-thumbnail-container">
+                <img v-bind:src="game.thumbnail" alt="game thumbnail" class="game-thumbnail">
+              </div>
+              <div class="card-body d-flex flex-column">
+                <div class="game-card-stats">
+                  <div class="stat">
+                    <span class="stat-label">Players</span>
+                    <span class="stat-value">{{ game.minplayers }}-{{ game.maxplayers }}</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value">{{ game.playingtime }} min</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">Age</span>
+                    <span class="stat-value">{{ game.minage }}+</span>
+                  </div>
+                </div>
+                <div class="rating-mini mt-2">
+                  <div class="rating-value" :style="{ width: (game.average_rating * 10) + '%' }"></div>
+                </div>
+                <small class="text-center text-muted">{{ parseFloat(game.average_rating).toFixed(1) }}/10</small>
+                <div class="mt-auto text-center pt-3">
+                  <router-link :to="'/games/show/' + game.id" class="btn btn-primary w-100">
+                    <i class="fas fa-info-circle me-1"></i> View Details
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page selector -->
+      <div class="pagination-container mt-4 mb-5">
+        <div class="container">
+          <div class="pagination d-flex justify-content-center align-items-center">
+            <button class="btn btn-outline-primary" @click="pageNumber = Number(pageNumber) - 1" :disabled="pageNumber <= 1">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="pagination-info mx-3">
+              Page
+              <input type="number" v-model="pageNumber" min="1" class="form-control d-inline-block mx-2" style="width: 70px;">
+              of {{ numberOfPages }}
+            </div>
+            <button class="btn btn-outline-primary" @click="pageNumber = Number(pageNumber) + 1" :disabled="pageNumber >= numberOfPages">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -216,12 +224,9 @@
 <script>
 export default {
   name: 'Games',
-  props: ['action', 'id'],  // properties that can be passed to the component
-  // action: show, edit, list
-  // id: book_id
+  props: ['action', 'id'],
   data() {
-    return {   // variables that can be used in the template
-      //user_role: 'GUEST',
+    return {
       pageNumber: 1,
       pageSize: 30,
       numberOfPages: 0,
@@ -229,36 +234,11 @@ export default {
       gameArray: [],
       libraryArray: [],
 
-      currentGame: {
-        /*[0] is game
-        */
-        /*
-        id: 0,
-        primary_name: "xxx",
-        description: "xxx",
-        yearpublished: 0,
-        minplayers: 0,
-        maxplayers: 0,
-        playingtime: 0,
-        minplaytime: 0,
-        maxplaytime: 0,
-        minage: 0,
-        bgg_rank: 0,
-        average_rating: 0.00,
-        bayes_average: 0.000,
-        users_rated : 0,
-        url: "xxx",
-        thumbnail: "xxx",
-        owned: 0,
-        trading: 0,
-        wanting: 0,
-        wishing: 0*/
-      }
+      currentGame: {}
     };
   },
 
-  methods: {   // logic that can be called from the template
-
+  methods: {
     async getAllData(pageNumber, pageSize) {
       try {
         let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize);
@@ -278,110 +258,21 @@ export default {
       }
     },
 
-
     async refreshcurrentGame() {
       if (this.$props.id === "all" || this.$props.id === "0") {
-        this.currentGame = {
-          /*
-          id: 0,
-          primary_name: "xxx",
-          description: "xxx",
-          yearpublished: 0,
-          minplayers: 0,
-          maxplayers: 0,
-          playingtime: 0,
-          minplaytime: 0,
-          maxplaytime: 0,
-          minage: 0,
-          bgg_rank: 0,
-          average_rating: 0.00,
-          bayes_average: 0.000,
-          users_rated : 0,
-          url: "xxx",
-          thumbnail: "xxx",
-          owned: 0,
-          trading: 0,
-          wanting: 0,
-          wishing: 0*/
-        };
+        this.currentGame = {};
         return;
       }
       try {
         let responseGame = await this.$http.get("http://localhost:9000/api/games/" + this.$props.id);
         this.currentGame = responseGame.data;
-
       } catch (ex) {
         console.log(ex);
       }
-    },
-
-    /*
-    async sendDeleteRequest(book_id) {
-      try {
-        alert("DELETING BOOK #" + book_id + "...");
-        let response = await this.$http.get("http://localhost:9000/api/books/del/" + book_id);
-        alert("DELETED: " + response.data.rowsDeleted + " book(s)");
-        this.getAllData();
-
-      } catch (ex) {
-        console.log(ex);
-      }
-    },
-
-    async sendEditRequest() {
-      try {
-        alert("EDITING BOOK #" + this.currentGame.book_id + "...");
-        let response = await this.$http.post("http://localhost:9000/api/books/update/" + this.currentGame.book_id, {
-          book_name: this.currentGame.book_name,
-          book_author: this.currentGame.book_author,
-          book_description: this.currentGame.book_description,
-          book_publicationDate: this.currentGame.book_publicationDate,
-          book_isbn: this.currentGame.book_isbn,
-          book_imageFileName: this.currentGame.book_imageFileName
-        });
-        alert("EDITED: " + response.data.rowsUpdated);
-        this.$router.push({path: '/books'}); // redirect to the book list
-        this.getAllData();
-
-      } catch (ex) {
-        console.log(ex)
-      }
-    },
-
-    async borrowBook(book_library_mapping_id) {
-      try {
-        if (this.user_role === 'GUEST') {
-          alert("You must create an account to borrow a book");
-          return;
-        }
-        else {
-          //alert("BORROWING BOOK #" + book_library_mapping_id + "...");
-          let response = await this.$http.get("http://localhost:9000/api/borrow/add/" + book_library_mapping_id);
-          alert("BORROWED: " + response.data.rowsUpdated + " book(s)");
-        }
-      } catch (ex) {
-        console.log(ex);
-      }
-    },
-
-    async searchRequest() {
-      try {
-        let searchValue = document.getElementById("searchBar").value;
-        if (searchValue === "") {
-          this.getAllData();
-          return;
-        }
-        let response = await this.$http.get("http://localhost:9000/api/books/search/" + searchValue);
-        this.bookArray = response.data;
-
-      } catch (ex) {
-        console.log(ex);
-      }
-    }*/
-
+    }
   },
 
-  watch: {   // watch for changes in the variables
+  watch: {
     id: function(newId, oldId) {
       this.refreshcurrentGame();
     },
@@ -401,8 +292,7 @@ export default {
     }
   },
 
-  created() {   // executed when the component is created
-    //this.getUserRole();
+  created() {
     this.getAllData(this.pageNumber, this.pageSize);
     this.getNumberOfPages().then((numberOfPages) => {
       this.numberOfPages = numberOfPages;
@@ -412,78 +302,191 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
+  /* General styles */
+  h1, h2, h3, h4, h5 {
+    font-weight: 600;
   }
 
   a {
-    color: #000000;
     text-decoration: none;
   }
-
-  a:hover {
-    text-decoration: underline;
+  
+  /* Game Cards on List Page */
+  .game-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.1);
   }
 
-  .new-button {
-    padding: 10px;
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .game-thumbnail-container {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+  }
+
+  .game-thumbnail {
+    max-height: 150px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .game-card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .game-card-stats .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .game-card-stats .stat-label {
+    font-size: 0.7rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .game-card-stats .stat-value {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  /* Game Details Page */
+  .game-details-container {
+    margin-bottom: 50px;
+  }
+
+  .game-header {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    padding: 20px 0;
     margin-bottom: 20px;
-    margin-top: -30px;
+    border-bottom: 1px solid #dee2e6;
   }
 
-
-  /************ GAMES LIST ************/
-  .games-list {
-    margin: auto; /* Center the ul element */
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    max-width: 1300px;
-    list-style-type: none; /* Remove dots */
-  }
-
-  .games-list li {
-    margin: 0 20px 20px;
-    text-align: center;
-    position: relative;
+  .game-cover-image {
     max-width: 200px;
-  }
-  
-  .games-list li img {
-    max-width: 100px;
-    max-height: 100px;
+    max-height: 200px;
+    border-radius: 10px;
+    object-fit: contain;
   }
 
-  .games-list tbody {
-    text-align: center;
-    font-size: 0.8em;
+  .game-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
   }
 
-  /************ Pagination ************/
-  .pagination {
+  .game-year {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 10px;
+  }
+
+  .game-meta .badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 20px;
+  }
+
+  .game-description {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Rating Stars */
+  .rating-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    /* space between the buttons */
-    gap: 10px;
   }
 
-  .pagination input[type="number"] {
-    width: 70px;
-    text-align: center;
+  .rating-stars {
+    width: 150px;
+    height: 30px;
+    background-color: #e9ecef;
+    border-radius: 15px;
+    margin-right: 10px;
+    position: relative;
+    overflow: hidden;
   }
 
-  table {
-    width: 80%;
-    /* center the table */
-    margin: 20px auto;
+  .rating-stars .rating-value {
+    height: 100%;
+    background: linear-gradient(to right, #ffc107, #fd7e14);
+    border-radius: 15px;
   }
-  
 
+  .rating-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .rating-mini {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rating-mini .rating-value {
+    height: 100%;
+    background: linear-gradient(to right, #ffc107, #fd7e14);
+    border-radius: 5px;
+  }
+
+  /* Info Items on Details Page */
+  .info-item, .stat-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .info-item:last-child, .stat-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .info-label, .stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+
+  .info-value, .stat-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  /* Pagination */
+  .pagination-container {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .pagination-info {
+    font-size: 1rem;
+  }
+
+  /* List Header */
+  .list-header {
+    border-bottom: 1px solid #dee2e6;
+  }
 </style>
