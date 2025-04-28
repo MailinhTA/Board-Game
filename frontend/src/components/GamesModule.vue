@@ -140,7 +140,7 @@
         </div>
 
         <div class="mt-4 text-center">
-          <a href="/#/games/list" class="btn btn-secondary">
+          <a href="/#/games/list/all" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-2"></i>Back to Games List
           </a>
         </div>
