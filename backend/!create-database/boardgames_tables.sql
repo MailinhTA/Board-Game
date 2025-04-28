@@ -271,11 +271,11 @@ BEGIN
     UPDATE games
     SET 
         users_rated = users_rated + 1,
-        average_rating = (
-            SELECT AVG(rating) 
-            FROM game_ratings 
-            WHERE game_id = NEW.game_id
-        )
+        -- average_rating = (
+        --     SELECT AVG(rating) 
+        --     FROM game_ratings 
+        --     WHERE game_id = NEW.game_id
+        -- )
     WHERE id = NEW.game_id;
 END//
 DELIMITER ;
@@ -283,21 +283,22 @@ DELIMITER ;
 -- Trigger to update games table when a rating is updated
 DROP TRIGGER IF EXISTS after_game_rating_update;
 DELIMITER //
-CREATE TRIGGER after_game_rating_update
-AFTER UPDATE ON game_ratings
-FOR EACH ROW
-BEGIN
-    -- Update average_rating in games table (users_rated doesn't change on update)
-    UPDATE games
-    SET 
-        average_rating = (
-            SELECT AVG(rating) 
-            FROM game_ratings 
-            WHERE game_id = NEW.game_id
-        )
-    WHERE id = NEW.game_id;
-END//
-DELIMITER ;
+
+-- CREATE TRIGGER after_game_rating_update
+-- AFTER UPDATE ON game_ratings
+-- FOR EACH ROW
+-- BEGIN
+--     -- Update average_rating in games table (users_rated doesn't change on update)
+--     UPDATE games
+--     SET 
+--         average_rating = (
+--             SELECT AVG(rating) 
+--             FROM game_ratings 
+--             WHERE game_id = NEW.game_id
+--         )
+--     WHERE id = NEW.game_id;
+-- END//
+-- DELIMITER ;
 
 -- Trigger to update games table when a rating is deleted
 DROP TRIGGER IF EXISTS after_game_rating_delete;
@@ -310,11 +311,11 @@ BEGIN
     UPDATE games
     SET 
         users_rated = GREATEST(users_rated - 1, 0),
-        average_rating = (
-            SELECT COALESCE(AVG(rating), 0)
-            FROM game_ratings 
-            WHERE game_id = OLD.game_id
-        )
+        -- average_rating = (
+        --     SELECT COALESCE(AVG(rating), 0)
+        --     FROM game_ratings 
+        --     WHERE game_id = OLD.game_id
+        -- )
     WHERE id = OLD.game_id;
 END//
 DELIMITER ;
