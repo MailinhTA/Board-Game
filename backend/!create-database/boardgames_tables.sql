@@ -78,11 +78,11 @@ CREATE TABLE games (
     bayes_average DECIMAL(4,3),
     users_rated INT,
     url VARCHAR(255),
-    thumbnail VARCHAR(255),
-    owned INT,
-    trading INT,
-    wanting INT,
-    wishing INT -- ,
+    thumbnail VARCHAR(255)
+    -- owned INT,
+    -- trading INT,
+    -- wanting INT,
+    -- wishing INT -- ,
     -- CONSTRAINT valid_players CHECK (minplayers <= maxplayers),
     -- CONSTRAINT valid_playtime CHECK (minplaytime <= maxplaytime),
     -- CONSTRAINT valid_ratings CHECK (average_rating BETWEEN 1.00 AND 10.00)

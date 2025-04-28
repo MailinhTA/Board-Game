@@ -75,12 +75,12 @@ def insert_games(cursor, games_data):
     """Insert games into the database"""
     print("Inserting games data...")
     
-    # Prepare SQL statements
+    # Prepare SQL statement - remove the fields that no longer exist in the table
     insert_game_sql = """
     INSERT INTO games (id, primary_name, description, yearpublished, minplayers, maxplayers, 
                       playingtime, minplaytime, maxplaytime, minage, bgg_rank, average_rating, 
-                      bayes_average, users_rated, url, thumbnail, owned, trading, wanting, wishing)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                      bayes_average, users_rated, url, thumbnail)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     
     # Process and insert each game
@@ -110,17 +110,17 @@ def insert_games(cursor, games_data):
             url = clean_text(game.get('url', ''))
             thumbnail = clean_text(game.get('thumbnail', ''))
             
-            # Collection stats
+            # Collection stats - keep them as variables but don't include in the query
             owned = int(game.get('owned', 0)) if game.get('owned') and game['owned'].isdigit() else None
             trading = int(game.get('trading', 0)) if game.get('trading') and game['trading'].isdigit() else None
             wanting = int(game.get('wanting', 0)) if game.get('wanting') and game['wanting'].isdigit() else None
             wishing = int(game.get('wishing', 0)) if game.get('wishing') and game['wishing'].isdigit() else None
             
-            # Execute insert statement
+            # Execute insert statement - removed owned, trading, wanting, wishing
             cursor.execute(insert_game_sql, (
                 game_id, primary_name, description, year, minplayers, maxplayers, 
                 playingtime, minplaytime, maxplaytime, minage, bgg_rank, avg_rating, 
-                bayes_avg, users_rated, url, thumbnail, owned, trading, wanting, wishing
+                bayes_avg, users_rated, url, thumbnail
             ))
             
         except Exception as e:
