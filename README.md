@@ -10,7 +10,7 @@ cd frontend
 npm install
 ```
 
-- Run the sql script ```boardgames.sql``` to create the tables and the stored functions / procedures.
+- Run the sql script ```boardgames.sql``` to create the tables and the stored functions / procedures (requires ```pip install mysql-connector-python```)
 - Run the python script ```fill-database.py``` to populate the MySQL database with the csv data. You will need to modify the 2 following lines in the python code (do not push the file with your updated info): 
   - ```path_before_file = 'C:/Users/.../Board-Game/backend/'```
   - ```'password': 'INSERT_PASS_HERE',```
