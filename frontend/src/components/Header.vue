@@ -136,6 +136,7 @@ export default {
 
   .profile-list {
     position: absolute;
+    right: 0;
     background-color: black;
     padding: 20px;
     margin-top: 10px;
@@ -143,6 +144,6 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    z-index: 100;
   }
-
 </style>
