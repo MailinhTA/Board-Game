@@ -1,5 +1,7 @@
 const passport = require("passport");
-const usersRepo = require(__dirname + "\\user.repository.js"); // use same folder as the current file
+const path = require("path");
+// Fix Windows-style backslashes
+const usersRepo = require(path.join(__dirname, "user.repository.js"));
 
 // const localStrategy = require('passport-local');
 // passport.use(new LocalStrategy(xxx));
