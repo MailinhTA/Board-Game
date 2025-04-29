@@ -1,6 +1,7 @@
 require('dotenv').config();
-let path = __dirname + "\\db.include.js";
-pool = require(path);
+const path = require('path');
+let dbPath = path.join(__dirname, "db.include.js");
+pool = require(dbPath);
 
 //const { verifyInput } = require('../utils/inputvalidation');
 
