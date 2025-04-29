@@ -63,7 +63,6 @@ export default {
 
 <style scoped>
 footer {
-  margin-top: 60px;
   background-color: black;
   padding: 20px 10px 10px;
   color: white;

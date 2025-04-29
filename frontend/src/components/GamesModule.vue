@@ -198,7 +198,7 @@
       </div>
 
       <!-- Page selector -->
-      <div class="pagination-container mt-4 mb-5">
+      <div class="pagination-container mt-4">
         <div class="container">
           <div class="pagination d-flex justify-content-center align-items-center">
             <button class="btn btn-outline-primary" @click="pageNumber = Number(pageNumber) - 1" :disabled="pageNumber <= 1">
