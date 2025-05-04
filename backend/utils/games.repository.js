@@ -45,10 +45,10 @@ module.exports = {
         }
     },
 
-    async getGamePage(page, pageSize) {
+    async getGamePage(page, pageSize, sort) {
         try {
-            let sql = "CALL get_games_page(?, ?)";
-            const [rows, fields] = await pool.execute(sql, [page, pageSize]);
+            let sql = "CALL get_games_page(?, ?, ?)";
+            const [rows, fields] = await pool.execute(sql, [page, pageSize, sort]);
             console.log("Games FETCHED: " + rows[0].length);
             return rows[0];
             

@@ -101,7 +101,7 @@
                          :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }" 
                          :aria-valuenow="currentGame[0][0].average_rating * 10" 
                          aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                </div>
                 </div>
                 <div class="stat-item">
                   <div class="stat-label">Bayes Average</div>
@@ -111,10 +111,20 @@
                          :style="{ width: (currentGame[0][0].bayes_average * 10) + '%' }" 
                          :aria-valuenow="currentGame[0][0].bayes_average * 10" 
                          aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                </div>
                 </div>
                 <div class="stat-item">
-                  <div class="stat-label">Users Rated</div>
+                  <div class="stat-label">Rating from our users</div>
+                  <div class="stat-value">{{ parseFloat(currentGame[0][0].total_rating).toFixed(2) }}/10</div>
+                  <div class="progress mt-1">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         :style="{ width: (currentGame[0][0].total_rating * 10) + '%' }" 
+                         :aria-valuenow="currentGame[0][0].total_rating * 10" 
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">total Users who Rated this game</div>
                   <div class="stat-value">{{ currentGame[0][0].users_rated }}</div>
                 </div>
               </div>
@@ -241,7 +251,7 @@ export default {
   methods: {
     async getAllData(pageNumber, pageSize) {
       try {
-        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize);
+        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/average_rating');
         this.gameArray = await responseGames.data;
 
       } catch (exception) {
