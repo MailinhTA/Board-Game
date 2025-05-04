@@ -205,7 +205,17 @@ CREATE TABLE game_ratings (
 );
 
 
-
+-- Create audit table for tracking changes to games (linked to the after_game_update trigger)
+CREATE TABLE game_changes_audit (
+    audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    game_id INT NOT NULL,
+    field_changed VARCHAR(50) NOT NULL,
+    old_value TEXT,
+    new_value TEXT,
+    change_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    changed_by VARCHAR(100)
+    -- FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+);
 
 
 
