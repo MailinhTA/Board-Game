@@ -56,3 +56,4 @@ app.use("/static", express.static(__dirname + '/static'));
 app.use("/api/games", require("./controllers/gamesapi.route"));
 app.use("/api/users", require("./controllers/user.route"));
 app.use("/api/auth", require("./controllers/auth.route"));
+app.use("/api/ratings", require("./controllers/ratingsapi.route"));
