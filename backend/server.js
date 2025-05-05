@@ -31,7 +31,12 @@ app.use(session({
 
 // enable Cross Origin Resource Sharing (needed for cross-origin API)
 const cors = require('cors');
-app.use(cors({ origin: "http://localhost:8080", credentials: true, methods: [ 'GET', 'POST' ] })); 
+app.use(cors({ 
+    origin: ["http://localhost:8080", "http://localhost:8081"], 
+    credentials: true, 
+    methods: [ 'GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 
 
 // configure passport
