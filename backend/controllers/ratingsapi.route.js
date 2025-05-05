@@ -2,16 +2,37 @@ const express = require('express');
 const router = express.Router();
 const gamesRepo = require('../utils/ratings.repository');
 
-router.get('/add/:user_id/:game_id/:rating/:comment', addRatingAction);
+router.post('/add', addRatingAction);
 
 
 async function addRatingAction(request, response) {
-    var user_id = request.params.user_id;
-    var game_id = request.params.game_id;
-    var rating = request.params.rating;
-    var comment = request.params.comment;
-    var result = await gamesRepo.addRating(user_id, game_id, rating, comment);
-    response.send(JSON.stringify(result));
+    try {
+        if (!request.body) {
+            return response.status(400).json({ error: 'No data provided in request body' });
+        }
+
+        if (request.isAuthenticated()) { // Do we have an authenticated user?
+            let userID = request.user.user_id;
+
+            let result = await gamesRepo.addRating(
+                userID,
+                request.body.game_id,
+                request.body.rating,
+                request.body.comment
+            );
+            response.send(JSON.stringify(result));
+        }
+        else {
+            response.status(401).send("Unauthorized: User not authenticated");
+        }
+
+    } catch (error) {
+        console.error("Error adding product:", error);
+        response.status(500).send("Internal Server Error");
+    }
+    
+        
+
 }
 
 

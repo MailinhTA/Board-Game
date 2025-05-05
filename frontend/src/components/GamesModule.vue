@@ -132,8 +132,22 @@
 
             <div class="card mb-4 shadow-sm">
               <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-link me-2"></i>Quick Actions</h4>
+                <h4 class="mb-0"><i class="fas fa-link me-2"></i>Rate this game!</h4>
               </div>
+              <div class="card-body">
+                <form @submit.prevent="addRating(rating, comment)">
+                  <div class="mb-3">
+                    <label for="rating" class="form-label">Your Rating</label>
+                    <input type="number" v-model="rating" min="1" max="10" step="0.1" class="form-control" id="rating" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="comment" class="form-label">Your Comment</label>
+                    <textarea v-model="comment" class="form-control" id="comment" rows="3"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">Submit Rating</button>
+                </form>
+              </div>
+              <!--
               <div class="card-body">
                 <a href="#" class="btn btn-outline-primary btn-block mb-2 w-100">
                   <i class="fas fa-heart me-2"></i>Add to Wishlist
@@ -145,6 +159,7 @@
                   <i class="fas fa-external-link-alt me-2"></i>View on BGG
                 </a>
               </div>
+              -->
             </div>
           </div>
         </div>
@@ -279,6 +294,25 @@ export default {
       } catch (ex) {
         console.log(ex);
       }
+    },
+
+    async addRating(ratingg, commentt) {
+      try {
+
+        let responseGame = await this.$http.post("http://localhost:9000/api/ratings/add", 
+          {
+            game_id: this.$props.id,
+            rating: ratingg,
+            comment: commentt,
+          }
+        );
+        this.refreshcurrentGame();
+
+      } catch (ex) {
+        console.log(ex);
+        alert("Error: " + ex);
+      }
+
     }
   },
 
