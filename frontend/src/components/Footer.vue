@@ -37,13 +37,13 @@
             <li class="zoom-hover">
               <a href="https://github.com/Robinprev" class="author-link">
                 <img src="../assets/logos/github-logo.png" alt="">
-                Robin Prevotat
+                Robin PREVOTAT
               </a>
             </li>
             <li class="zoom-hover">
               <a href="https://github.com/TiphDPRX" class="author-link">
                 <img src="../assets/logos/github-logo.png" alt="">
-                Tiphanie Depreaux
+                Tiphanie DEPREAUX
               </a>
             </li>
           </ul>
