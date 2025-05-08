@@ -90,8 +90,6 @@ export default {
     padding-top: 10px;
     color: white;
     text-align: left;
-    /* size (up to bottom) */
-    height: 100px;
   }
 
   nav {

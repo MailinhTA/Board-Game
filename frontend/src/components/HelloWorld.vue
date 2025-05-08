@@ -3,7 +3,7 @@
     <h1 style="margin-top: 40px;">{{ msg }}</h1>
     <h2>The utilmate website to know everything about board games !</h2>
     <div style="margin-top: 30px;">
-      <img :src="img_board_game" alt="Mon logo" class="responsive-img" />
+      <img :src="img_board_game" alt="Mon logo" class="responsive-img" width="500"/>
     </div>
     <section class="welcome-section"  style="margin-top: 30px;">
       <p class="intro-text">
@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to Wikigames',
-      img_board_game: require('../assets/logos/boardgameIMG.jpg')
+      img_board_game: require('../assets/boardgameIMG.jpg')
     }
   }
 }
