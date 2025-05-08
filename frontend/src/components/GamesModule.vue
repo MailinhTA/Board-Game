@@ -355,9 +355,16 @@ export default {
 
       } catch (ex) {
         console.log(ex);
-        alert("Error: " + ex);
+        if (ex.response.status === 401) {
+          alert("You must be logged in to rate a game.");
+        } else if (ex.response.status === 400) {
+          alert("Error: " + ex.response.data.message);
+        } else if (ex.response.status === 500) {
+          alert("Server error. Please try again later.");
+        } else {
+          alert("Error: " + ex);
+        }
       }
-
     }
   },
 
