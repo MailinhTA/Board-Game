@@ -20,5 +20,22 @@ module.exports = {
         }
     },
 
+    async getRatings(p_game_id) {
+        try {
+            let sql = "CALL get_latest_game_ratings(?)";
+            const [rows, fields] = await pool.execute(sql, [p_game_id]);
+            console.log("GET Ratings for game " + p_game_id);
+            // change date format from YYYY-MM-DDTHH:MM:SS to YYYY-MM-DD
+            for (let i = 0; i < rows[0].length; i++) {
+                rows[0][i].rating_date = rows[0][i].rating_date.toISOString().split('T')[0];
+            }
+            return rows[0];
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
 
 };

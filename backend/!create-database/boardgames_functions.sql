@@ -350,6 +350,34 @@ DELIMITER ;
 
 
 
+-- Stored procedure to get the last 3 ratings for a specific game
+DROP PROCEDURE IF EXISTS get_latest_game_ratings;
+DELIMITER //
+
+CREATE PROCEDURE get_latest_game_ratings(
+    IN p_game_id INT
+)
+BEGIN
+    SELECT gr.rating_id, gr.user_id, u.user_name, gr.rating, 
+           gr.rating_comment, gr.rating_date
+    FROM game_ratings gr
+    JOIN users u ON gr.user_id = u.user_id
+    WHERE gr.game_id = p_game_id
+    ORDER BY gr.rating_date DESC
+    LIMIT 3;
+END //
+
+DELIMITER ;
+
+-- CALL get_latest_game_ratings(123); -- Replace with a valid game_id
+
+
+
+
+
+
+
+
 ############################################################################
 ########################### FUNCTIONS ######################################
 ############################################################################

@@ -3,6 +3,7 @@ const router = express.Router();
 const gamesRepo = require('../utils/ratings.repository');
 
 router.post('/add', addRatingAction);
+router.get('/getlast/:game_id', getRatingsAction);
 
 
 async function addRatingAction(request, response) {
@@ -30,9 +31,17 @@ async function addRatingAction(request, response) {
         console.error("Error adding product:", error);
         response.status(500).send("Internal Server Error");
     }
-    
-        
+}
 
+async function getRatingsAction(request, response) {
+    try {
+        let gameID = request.params.game_id;
+        let result = await gamesRepo.getRatings(gameID);
+        response.send(JSON.stringify(result));
+    } catch (error) {
+        console.error("Error getting ratings:", error);
+        response.status(500).send("Internal Server Error");
+    }
 }
 
 

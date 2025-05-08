@@ -80,6 +80,40 @@
                 </div>
               </div>
             </div>
+
+
+        <!-- Recent Ratings Section -->
+        <div class="row mt-5">
+          <div class="col-12">
+            <div class="card shadow-sm">
+              <div class="card-header bg-white">
+                <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Recent Ratings</h4>
+              </div>
+              <div class="card-body">
+                <div v-if="ratingsArray.length === 0" class="text-center py-4">
+                  <p class="text-muted">No ratings yet. Be the first to rate this game!</p>
+                </div>
+                <div v-else>
+                  <div class="rating-item mb-3 pb-3 border-bottom" v-for="(rating, index) in ratingsArray" :key="rating.rating_id">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="mb-1">{{ rating.user_name }}</h5>
+                        <div class="text-muted small">{{ rating.rating_date }}</div>
+                      </div>
+                      <div class="rating-badge">
+                        <span class="badge bg-primary">{{ parseFloat(rating.rating).toFixed(1) }}/10</span>
+                      </div>
+                    </div>
+                    <p class="mt-2 mb-0"><b>" </b>{{ rating.rating_comment }}<b> "</b></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
           </div>
 
           <!-- Sidebar column -->
@@ -133,11 +167,12 @@
             <div class="card mb-4 shadow-sm">
               <div class="card-header bg-white">
                 <h4 class="mb-0"><i class="fas fa-link me-2"></i>Rate this game!</h4>
+                <small class="text-muted"> (You must be logged in)</small>
               </div>
               <div class="card-body">
                 <form @submit.prevent="addRating(rating, comment)">
                   <div class="mb-3">
-                    <label for="rating" class="form-label">Your Rating</label>
+                    <label for="rating" class="form-label">Your Rating<small class="text-muted"> (1-10)</small></label>
                     <input type="number" v-model="rating" min="1" max="10" step="0.1" class="form-control" id="rating" required>
                   </div>
                   <div class="mb-3">
@@ -257,7 +292,7 @@ export default {
       numberOfPages: 0,
 
       gameArray: [],
-      libraryArray: [],
+      ratingsArray: [],
 
       currentGame: {}
     };
@@ -283,6 +318,15 @@ export default {
       }
     },
 
+    async getRatings() {
+      try {
+        let responseRatings = await this.$http.get('http://localhost:9000/api/ratings/getlast/' + this.$props.id);
+        this.ratingsArray = await responseRatings.data;
+      } catch (exception) {
+        console.log(exception);
+      }
+    },
+
     async refreshcurrentGame() {
       if (this.$props.id === "all" || this.$props.id === "0") {
         this.currentGame = {};
@@ -291,6 +335,7 @@ export default {
       try {
         let responseGame = await this.$http.get("http://localhost:9000/api/games/" + this.$props.id);
         this.currentGame = responseGame.data;
+        this.getRatings();
       } catch (ex) {
         console.log(ex);
       }
