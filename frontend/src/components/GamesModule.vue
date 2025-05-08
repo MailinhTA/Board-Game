@@ -272,6 +272,19 @@
             <button class="btn btn-outline-primary" @click="pageNumber = Number(pageNumber) + 1" :disabled="pageNumber >= numberOfPages">
               Next <i class="fas fa-chevron-right"></i>
             </button>
+
+            <div class="page-size-selector ms-3">
+              <label for="pageSize" class="me-2">Items per page:</label>
+              <select id="pageSize" v-model="pageSize" class="form-select form-select-sm d-inline-block" style="width: 80px;">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -304,6 +317,9 @@ export default {
         let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/average_rating');
         this.gameArray = await responseGames.data;
 
+        this.getNumberOfPages() .then((numberOfPages) => {
+          this.numberOfPages = numberOfPages;
+        });
       } catch (exception) {
         console.log(exception);
       }
