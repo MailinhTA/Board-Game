@@ -3,12 +3,14 @@
     <nav>
       <ul>
         <li>
-          <a href="#/" @click="getUserRole()">
-            <h1> <!--<img src="../assets/logos/borrrow-logo.png" alt="BooknBorrow" width="100">--> Wikigames </h1>
+          <a href="#/">
+            <h1>
+              <img src="../assets/logos/wikigames.png" alt="" width="80">
+              Wikigames </h1>
           </a>
         </li>
         <li class="zoom-hover">
-          <a href="#/games/list/all/" @click="getUserRole()"> Games</a>
+          <a href="#/games/list/all/"> Games</a>
         </li>
         <!--
         <li class="zoom-hover">
@@ -68,33 +70,14 @@ export default {
   },
 
   methods: {
-    async getUserRole() {
-      try {
-        //alert("getUserRole");
-        let response = await this.$http.get("http://localhost:9000/api/auth/role");
-        this.user_role = response.data;
-      } catch (ex) {
-        console.log(ex);
-      }
-    },
-
     async sendLogoutRequest(method, endpoint, params) {
       try {
         this.$router.push('/profile/login');
         let response = null;
         response = await this.$http.get("http://localhost:9000/api/auth/"+endpoint);
         this.msg = JSON.stringify(response.data);
-        this.getUserRole();
       } catch (error) {
         console.log(ex)
-      }
-    }
-  },
-
-  watch: {   // watch for changes in the variables
-    user_role: function(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.getUserRole();
       }
     }
   },
@@ -107,6 +90,8 @@ export default {
     padding-top: 10px;
     color: white;
     text-align: left;
+    /* size (up to bottom) */
+    height: 100px;
   }
 
   nav {
