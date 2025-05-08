@@ -9,6 +9,26 @@ router.get('/list', auth.authorizeRequest("ADMIN"), userListAction);
 router.get('/show/:userId', auth.authorizeRequest("ADMIN"), userShowAction);
 router.get('/del/:userId', auth.authorizeRequest("ADMIN"), userDelAction);
 router.post('/update/:userId', auth.authorizeRequest("ADMIN"), userUpdateAction);
+router.post('/add', userAddAction);
+
+
+async function userAddAction(request, response) {
+    try {
+        if (!request.body) {
+            return response.status(400).json({ error: 'No data provided in request body' });
+        }
+
+        const newUserId = await userRepo.addUser(
+            request.body.user_name,
+            request.body.user_email,
+            request.body.user_password,
+            "USER"
+        );
+        response.json({ userId: newUserId, message: 'User added successfully' });
+    } catch (error) {
+        response.status(500).json({ error: 'Failed to add user' });
+    }
+}
 
 async function userListAction(request, response) {
     try {
