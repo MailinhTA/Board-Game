@@ -214,6 +214,24 @@
           <h1 class="text-center mb-0">Board Game Collection</h1>
           <p class="text-center text-muted mb-0">Discover amazing games for your next game night</p>
         </div>
+
+
+        <div class="container mt-3">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="sorting-controls d-flex align-items-center justify-content-center">
+                <label for="sortOrder" class="me-2">Sort by:</label>
+                <select id="sortOrder" v-model="order_by" class="form-select" @change="getAllData(pageNumber, pageSize)">
+                  <option value="average_rating">Average Rating</option>
+                  <option value="yearpublished">Year Published</option>
+                  <option value="users_rated">Number of Ratings</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
 
       <div class="container">
@@ -303,6 +321,7 @@ export default {
       pageNumber: 1,
       pageSize: 30,
       numberOfPages: 0,
+      order_by: 'average_rating',
 
       gameArray: [],
       ratingsArray: [],
@@ -314,7 +333,7 @@ export default {
   methods: {
     async getAllData(pageNumber, pageSize) {
       try {
-        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/average_rating');
+        let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
         this.gameArray = await responseGames.data;
 
         this.getNumberOfPages() .then((numberOfPages) => {
