@@ -66,7 +66,7 @@ async function deleteRatingAction(request, response) {
             let userIDP = request.params.user_id;
             if (userIDA == userIDP || request.user.user_role == "ADMIN") {
                 let gameID = request.params.game_id;
-                let result = await gamesRepo.deleteRating(userID, gameID);
+                let result = await gamesRepo.deleteRating(userIDP, gameID);
                 response.send(JSON.stringify(result));
             }
             else {
