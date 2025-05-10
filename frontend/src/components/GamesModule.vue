@@ -218,13 +218,24 @@
           <p class="text-center text-muted mb-0">Discover amazing games for your next game night</p>
         </div>
 
+        <!-- Search bar -->
+        <div class="container">
+          <div class="row height d-flex justify-content-center align-items-center">
+            <div class="col-md-8">
+              <div class="search">
+                <input type="text" v-model="searchField" id="searchBar" class="form-control" placeholder="Search for a book, author...">
+                <input type="button" value="Search" @click="searchRequest()" class="zoom-hover"/>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="container mt-3">
           <div class="row justify-content-center">
             <div class="col-md-6">
               <div class="sorting-controls d-flex align-items-center justify-content-center">
                 <label for="sortOrder" class="me-2">Sort by:</label>
-                <select id="sortOrder" v-model="order_by" class="form-select" @change="getAllData(pageNumber, pageSize)">
+                <select id="sortOrder" v-model="order_by" class="form-select" @change="getAllData()">
                   <option value="average_rating">Average Rating (from users)</option>
                   <option value="bayes_average">Bayes Average (weighed average)</option>
                   <option value="users_rated">Number of Ratings (popularity)</option>
@@ -331,6 +342,7 @@ export default {
       pageSize: 30,
       numberOfPages: 0,
       order_by: 'bayes_average',
+      searchField: '',
 
       gameArray: [],
       ratingsArray: [],
@@ -340,7 +352,7 @@ export default {
   },
 
   methods: {
-    async getAllData(pageNumber, pageSize) {
+    async getAllData() {
       try {
         let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
         this.gameArray = await responseGames.data;
@@ -348,6 +360,23 @@ export default {
         this.getNumberOfPages() .then((numberOfPages) => {
           this.numberOfPages = numberOfPages;
         });
+      } catch (exception) {
+        console.log(exception);
+      }
+    },
+
+    async searchRequest() {
+      try {
+        let searchFieldEncoded = encodeURIComponent(this.searchField);
+        if (this.searchField !== "") {
+          let responseGames = await this.$http.get('http://localhost:9000/api/games/search/' + searchFieldEncoded + '/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
+          this.gameArray = await responseGames.data;
+
+          this.numberOfPages = "?";
+        }
+        else {
+          this.getAllData();
+        }
       } catch (exception) {
         console.log(exception);
       }
@@ -419,12 +448,12 @@ export default {
 
     action: function(newAction, oldAction) {
       if (newAction === 'list') {
-        this.getAllData(this.pageNumber, this.pageSize);
+        this.getAllData();
       }
     },
 
     pageNumber: function(newPageNumber, oldPageNumber) {
-      this.getAllData(this.pageNumber, this.pageSize);
+      this.getAllData();
     },
 
     order_by: function(newOrderBy, oldOrderBy) {
@@ -432,12 +461,12 @@ export default {
     },
 
     pageSize: function(newPageSize, oldPageSize) {
-      this.getAllData(this.pageNumber, this.pageSize);
+      this.getAllData();
     }
   },
 
   created() {
-    this.getAllData(this.pageNumber, this.pageSize);
+    this.getAllData();
     this.getNumberOfPages().then((numberOfPages) => {
       this.numberOfPages = numberOfPages;
     });
@@ -632,5 +661,41 @@ export default {
   /* List Header */
   .list-header {
     border-bottom: 1px solid #dee2e6;
+  }
+
+
+
+  /************ SEARCH BAR ************/
+  .search {
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+  }
+
+  .search input[type="text"] {
+    height: 60px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+  }
+
+
+  .search input[type="text"]:focus {
+    box-shadow: none;
+    border: 2px solid #42b983;
+  }
+
+  .search input[type="button"] {
+    position: absolute;
+    top: 5px;     /* 5px from the top   */
+    right: 5px;   /* 5px from the right */
+    height: 50px;
+    width: 110px;
+    background: #42b983;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .search input[type="button"]:active {
+    background: #d6d4d4;
   }
 </style>
