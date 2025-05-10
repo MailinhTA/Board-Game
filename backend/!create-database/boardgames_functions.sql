@@ -310,7 +310,7 @@ DELIMITER ;
 
 
 
--- Stored procedure to add or update a game rating
+-- Stored procedure to add or update a game rating (with transaction handling)
 DROP PROCEDURE IF EXISTS add_game_rating;
 DELIMITER //
 CREATE PROCEDURE add_game_rating(
@@ -320,6 +320,15 @@ CREATE PROCEDURE add_game_rating(
     IN p_comment TEXT
 )
 BEGIN
+    -- Declare variables for error handling
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred while updating game rating';
+    END;
+    
+    START TRANSACTION;
+    
     -- Check if the user has already rated this game
     DECLARE rating_exists INT;
     
@@ -339,12 +348,40 @@ BEGIN
         INSERT INTO game_ratings (user_id, game_id, rating, rating_comment)
         VALUES (p_user_id, p_game_id, p_rating, p_comment);
     END IF;
+    
+    COMMIT;
 END//
-
 DELIMITER ;
 
 -- CALL add_game_rating(1, 1, 8.5, 'Great game!'); -- call the procedure to add a rating
 
+
+-- Add a procedure to delete a game rating with transaction handling
+DROP PROCEDURE IF EXISTS delete_game_rating;
+DELIMITER //
+CREATE PROCEDURE delete_game_rating(
+    IN p_user_id INT,
+    IN p_game_id INT
+)
+BEGIN
+    -- Error handling
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred while deleting the rating';
+    END;
+    
+    START TRANSACTION;
+    
+    -- Delete the rating
+    DELETE FROM game_ratings
+    WHERE user_id = p_user_id AND game_id = p_game_id;
+    
+    -- The trigger after_game_rating_delete will handle updating the games table
+    
+    COMMIT;
+END//
+DELIMITER ;
 
 
 
