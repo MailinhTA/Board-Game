@@ -53,4 +53,9 @@ export default {
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  .component-h1 {
+    color: #4b5861;
+    margin: 40px 0;
+  }
 </style>

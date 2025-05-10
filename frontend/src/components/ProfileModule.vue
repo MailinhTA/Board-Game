@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    {{ this.role }}
+    <!--{{ this.role }}-->
 
     <div v-if="action === 'myprofile'">
       <!-- If the user is not logged in -->
@@ -13,7 +13,7 @@
 
       <!-- If the user is logged in -->
       <div v-if="this.role !== 'GUEST'">
-        {{ currentUser }}
+        <!--{{ currentUser }}-->
         <h1 class="component-h1">Your Profile, {{currentUser.user_name}}</h1>
         <div class="show-user">
             <table class="table table-striped table-bordered">
@@ -43,7 +43,7 @@
         <!-- Ratings list -->
         <div>
           <h1 class="component-h1">Your Ratings</h1>
-          {{ RatingsArray }}
+          <!--{{ RatingsArray }}-->
           <div v-if="RatingsArray.length === 0">
             <p>You haven't rated any games yet.</p>
           </div>
@@ -60,11 +60,11 @@
                 <div class="rating-date">Rated on: {{ rating.rating_date }}</div>
               </div>
               <div class="rating-actions">
-                <a :href="'#/games/show/' + rating.game_id" class="btn btn-danger">View Game</a>
-                <button @click="deleteRating(currentUser.user_id, rating.game_id)" class="btn btn-danger">Delete</button>
+                <a :href="'#/games/show/' + rating.game_id" class="btn">View Game</a>
+                <button @click="deleteRating(currentUser.user_id, rating.game_id)" class="btn">Delete Rating</button>
             </div>
             </div>
-          </div>
+          </div><br><br><br><br><br>
         </div>
 
       </div>
@@ -329,57 +329,18 @@
     margin: auto auto 20px;
   }
 
-  /************ BOOK LIST ************/
-  .book-list {
-    margin: auto; /* Center the ul element */
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    max-width: 1500px;
-    list-style-type: none; /* Remove dots */
-  }
 
-  .book-list li {
-    margin: 0 20px 20px;
-    text-align: center;
-    position: relative;
-    max-width: 200px;
-  }
-
-  .book-list a {
-    color: #000000;
-    text-decoration: none;
-  }
-
-  .book-list a:hover {
-    text-decoration: underline;
-  }
-
-  /*
-  *************************
-  ***** RATINGS LIST ******
-  *************************
-  */
+  /************ RATINGS LIST ************/
 
   .ratings-container {
+    max-width: 1200px;
+    margin: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 20px;
   }
 
-  .ratings-container a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .ratings-container a:hover {
-    text-decoration: underline;
-  }
 
   .rating-card {
     border: 1px solid #e0e0e0;
@@ -433,5 +394,25 @@
     font-size: 0.8rem;
     color: #666;
     text-align: right;
+  }
+
+  .rating-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  .rating-actions .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .rating-actions .btn:hover {
+    background-color: #0056b3;
   }
 </style>
