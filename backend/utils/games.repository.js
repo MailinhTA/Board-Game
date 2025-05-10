@@ -58,6 +58,19 @@ module.exports = {
         }
     },
 
+    async getSearchGamePage(searchTerm, page, pageSize, sort) {
+        try {
+            let sql = "CALL search_games_by_name(?, ?, ?, ?)";
+            const [rows, fields] = await pool.execute(sql, [searchTerm, page, pageSize, sort]);
+            console.log("Games FETCHED: " + rows[0].length);
+            return rows[0];
+            
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
     async getTotalGames() {
         try {
             let sql = "SELECT get_total_games()";

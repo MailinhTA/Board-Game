@@ -4,6 +4,7 @@ const gamesRepo = require('../utils/games.repository');
 
 router.get('/list', gamesListAction); //Works
 router.get('/page/:page/:pageSize/:sort', gamesPageAction); //Works
+router.get('/search/:searchTerm/:page/:pageSize/:sort', gamesSearchPageAction); //Works
 
 router.get('/total/games', totalGamesAction);
 router.get('/total/pages/:pageSize', totalPagesAction); //Works
@@ -21,6 +22,15 @@ async function gamesPageAction(request, response) {
     var pageSize = request.params.pageSize;
     var sort = request.params.sort;
     var games = await gamesRepo.getGamePage(page, pageSize, sort);
+    response.send(JSON.stringify(games));
+}
+
+async function gamesSearchPageAction(request, response) {
+    var searchTerm = request.params.searchTerm;
+    var page = request.params.page;
+    var pageSize = request.params.pageSize;
+    var sort = request.params.sort;
+    var games = await gamesRepo.getSearchGamePage(searchTerm, page, pageSize, sort);
     response.send(JSON.stringify(games));
 }
 
