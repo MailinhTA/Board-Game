@@ -129,4 +129,27 @@ export default {
     gap: 20px;
     z-index: 100;
   }
+
+  
+  /* button OR input[type="button"] */
+  button, input[type="button"] {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 9px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button:hover, input[type="button"]:hover {
+    background-color: #45a049;
+  }
+  button:disabled, input[type="button"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 </style>
