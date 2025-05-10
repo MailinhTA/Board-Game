@@ -439,6 +439,65 @@ DELIMITER ;
 
 
 
+-- Stored procedure to search games by name with pagination and sorting
+DROP PROCEDURE IF EXISTS search_games_by_name;
+DELIMITER //
+
+CREATE PROCEDURE search_games_by_name(
+    IN search_term VARCHAR(255),
+    IN page_num INT, 
+    IN items_per_page INT,
+    IN sort_by VARCHAR(20) -- Options: 'id', 'yearpublished', 'average_rating', 'users_rated', etc.
+)
+BEGIN
+    DECLARE offset_val INT;
+    SET offset_val = (page_num - 1) * items_per_page;
+    
+    -- Set default sorting if NULL or invalid value provided
+    IF sort_by IS NULL OR sort_by NOT IN ('id', 'yearpublished', 'average_rating', 'bayes_average', 'bgg_rank', 'users_rated') THEN
+        SET sort_by = 'id';
+    END IF;
+    
+    -- Dynamic sorting based on parameter with name search
+    CASE sort_by
+        WHEN 'yearpublished' THEN
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY yearpublished DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'average_rating' THEN
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY average_rating DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'users_rated' THEN
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY users_rated DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bayes_average' THEN
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY bayes_average DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bgg_rank' THEN
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY bgg_rank ASC, id
+            LIMIT offset_val, items_per_page;
+        ELSE
+            -- Default is sorting by id
+            SELECT * FROM games 
+            WHERE primary_name LIKE CONCAT('%', search_term, '%')
+            ORDER BY id
+            LIMIT offset_val, items_per_page;
+    END CASE;
+END //
+
+DELIMITER ;
+
+-- CALL search_games_by_name('Catan', 1, 10, 'average_rating'); -- Example usage:
+
 
 
 
