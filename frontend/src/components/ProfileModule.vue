@@ -40,52 +40,31 @@
         <br><br>
         <hr>
         
-        <!-- Book list -->
+        <!-- Ratings list -->
         <div>
-          <h1 class="component-h1">Your borrows</h1>
-          <ul class="book-list">
-            <li v-for="book of bookArray" v-bind:key="book.book_id" class="zoom-hover">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th colspan="3">
-                      <a :href="'/#/books/show/' + book.book_id">
-                        {{ book.book_name }}<br/>
-                        <i><small>{{ book.book_author }}</small></i>
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th colspan="3">
-                      <a :href="'/#/books/show/' + book.book_id">
-                        <img v-bind:src="'../../static/book-covers/'+book.book_imageFileName" alt="" width="150" height="230">
-                      </a>
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>Borrow status:</b><br/>
-                      {{ book.borrow_status }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Due date:</b><br/>
-                      {{book.borrow_returnDate}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Fine:</b> {{book.borrow_fine}}$
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </li>
-          </ul>
+          <h1 class="component-h1">Your Ratings</h1>
+          {{ RatingsArray }}
+          <div v-if="RatingsArray.length === 0">
+            <p>You haven't rated any games yet.</p>
+          </div>
+          <div v-else class="ratings-container">
+            <div v-for="rating in RatingsArray" :key="rating.rating_id" class="rating-card">
+              <div class="rating-header">
+                <h3 class="game-name">{{ rating.primary_name }}</h3>
+                <div class="rating-score">
+                  {{ rating.rating }}
+                </div>
+              </div>
+              <div class="rating-content">
+                <p class="rating-comment"><b>" </b>{{ rating.rating_comment || "No comment" }}<b> "</b></p>
+                <div class="rating-date">Rated on: {{ rating.rating_date }}</div>
+              </div>
+              <div class="rating-actions">
+                <a :href="'#/games/show/' + rating.game_id" class="btn btn-danger">View Game</a>
+                <button @click="deleteRating(currentUser.user_id, rating.game_id)" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -149,7 +128,7 @@
     data() {
         return {
             role: '',
-            bookArray: [],
+            RatingsArray: [],
             currentUser: {
                 user_id: 0,
                 user_name: '',
@@ -184,12 +163,37 @@
           if (this.role && this.role !== 'GUEST') {
             let response = await this.$http.get("http://localhost:9000/api/auth/"+this.role.toLowerCase());
             this.currentUser = response.data;
-            // Uncomment and fix this if you want to load borrowed books
-            // response = await this.$http.get("http://localhost:9000/api/borrow/userbooks/"+this.currentUser.user_id);
-            // this.bookArray = response.data;
+            await this.getRatings();
           }
         } catch (error) {
           console.log(error);
+        }
+      },
+
+      async getRatings() {
+        try {
+          let response = await this.$http.get("http://localhost:9000/api/ratings/getuser/"+this.currentUser.user_id);
+          this.RatingsArray = response.data;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      async deleteRating(userID, gameID) {
+        try {
+          await this.$http.get("http://localhost:9000/api/ratings/delete/"+userID+"/"+gameID);
+          // Refresh the ratings after deletion
+          await this.getRatings();
+        } catch (error) {
+          if (error.response.status === 403) {
+            alert("You are not allowed to delete this rating.");
+          } else if (error.response.status === 401) {
+            alert("Unauthorized. Please log in.");
+          } else if (error.response.status === 500) {
+            alert("Server error. Please try again later.");
+          } else {
+            alert(error);
+          }
         }
       },
 
@@ -353,5 +357,81 @@
 
   .book-list a:hover {
     text-decoration: underline;
+  }
+
+  /*
+  *************************
+  ***** RATINGS LIST ******
+  *************************
+  */
+
+  .ratings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .ratings-container a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ratings-container a:hover {
+    text-decoration: underline;
+  }
+
+  .rating-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .rating-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .rating-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+  }
+
+  .game-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .rating-score {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 15px;
+    min-width: 35px;
+    text-align: center;
+  }
+
+  .low-rating { background-color: #ffcccc; color: #d32f2f; }
+  .medium-rating { background-color: #fff0c8; color: #ff8f00; }
+  .high-rating { background-color: #d4edda; color: #28a745; }
+  .rating-content {
+    padding-top: 8px;
+  }
+
+  .rating-comment {
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .rating-date {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
   }
 </style>
