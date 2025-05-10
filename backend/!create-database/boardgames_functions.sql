@@ -393,9 +393,7 @@ CREATE PROCEDURE get_user_ratings(
     IN p_user_id INT
 )
 BEGIN
-    SELECT gr.*, g.primary_name, g.id AS game_name, 
-           gr.rating, gr.rating_comment, gr.rating_date
-    FROM game_ratings gr
+    SELECT gr.*, g.primary_name FROM game_ratings gr
     JOIN games g ON gr.game_id = g.id
     WHERE gr.user_id = p_user_id
     ORDER BY gr.rating_date DESC;
