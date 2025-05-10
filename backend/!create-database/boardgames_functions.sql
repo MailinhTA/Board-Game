@@ -331,7 +331,7 @@ BEGIN
     END;
     
     START TRANSACTION;
-    
+
     SELECT COUNT(*) INTO rating_exists
     FROM game_ratings
     WHERE user_id = p_user_id AND game_id = p_game_id;
@@ -383,6 +383,27 @@ BEGIN
 END//
 DELIMITER ;
 
+
+
+-- Stored procedure to get all ratings made by a specific user
+DROP PROCEDURE IF EXISTS get_user_ratings;
+DELIMITER //
+
+CREATE PROCEDURE get_user_ratings(
+    IN p_user_id INT
+)
+BEGIN
+    SELECT gr.*, g.primary_name, g.id AS game_name, 
+           gr.rating, gr.rating_comment, gr.rating_date
+    FROM game_ratings gr
+    JOIN games g ON gr.game_id = g.id
+    WHERE gr.user_id = p_user_id
+    ORDER BY gr.rating_date DESC;
+END //
+
+DELIMITER ;
+
+-- CALL get_user_ratings(1); -- Replace with a valid user_id
 
 
 
