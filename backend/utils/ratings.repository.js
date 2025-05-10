@@ -46,7 +46,7 @@ module.exports = {
             for (let i = 0; i < rows[0].length; i++) {
                 rows[0][i].rating_date = rows[0][i].rating_date.toISOString().split('T')[0];
             }
-            return rows[0][0];
+            return rows[0];
         }
         catch (err) {
             console.log(err);
