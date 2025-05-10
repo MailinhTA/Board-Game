@@ -40,5 +40,6 @@ node server.js
 - Search for a game
 - See a game's details
 - Rate a game
+- See other people's ratings
 - Update your rating
 - See all your ratings
