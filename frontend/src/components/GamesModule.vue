@@ -418,6 +418,10 @@ export default {
       this.getAllData(this.pageNumber, this.pageSize);
     },
 
+    order_by: function(newOrderBy, oldOrderBy) {
+      this.pageNumber = 1; // Reset to first page when sorting changes
+    },
+
     pageSize: function(newPageSize, oldPageSize) {
       this.getAllData(this.pageNumber, this.pageSize);
     }
