@@ -215,7 +215,7 @@ BEGIN
     SET offset_val = (page_num - 1) * items_per_page;
     
     -- Set default sorting if NULL or invalid value provided
-    IF sort_by IS NULL OR sort_by NOT IN ('id', 'yearpublished', 'average_rating', 'users_rated') THEN
+    IF sort_by IS NULL OR sort_by NOT IN ('id', 'yearpublished', 'average_rating', 'bayes_average', 'bgg_rank', 'users_rated') THEN
         SET sort_by = 'id';
     END IF;
     
@@ -232,6 +232,14 @@ BEGIN
         WHEN 'users_rated' THEN
             SELECT * FROM games 
             ORDER BY users_rated DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bayes_average' THEN
+            SELECT * FROM games 
+            ORDER BY bayes_average DESC, id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bgg_rank' THEN
+            SELECT * FROM games 
+            ORDER BY bgg_rank ASC, id
             LIMIT offset_val, items_per_page;
         ELSE
             -- Default is sorting by id

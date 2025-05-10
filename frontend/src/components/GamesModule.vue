@@ -134,8 +134,20 @@
                     <div class="progress-bar bg-success" role="progressbar" 
                          :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }" 
                          :aria-valuenow="currentGame[0][0].average_rating * 10" 
-                         aria-valuemin="0" aria-valuemax="100"></div>
+                         aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                  </div>
                 </div>
+                <div class="stat-item">
+                  <div class="stat-label">Rating from our users</div>
+                  <div class="stat-value">{{ parseFloat(currentGame[0][0].total_rating).toFixed(2) }}/10</div>
+                  <div class="progress mt-1">
+                    <div class="progress-bar bg-warning" role="progressbar" 
+                         :style="{ width: (currentGame[0][0].total_rating * 10) + '%' }" 
+                         :aria-valuenow="currentGame[0][0].total_rating * 10" 
+                         aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                  </div>
                 </div>
                 <div class="stat-item">
                   <div class="stat-label">Bayes Average</div>
@@ -145,17 +157,7 @@
                          :style="{ width: (currentGame[0][0].bayes_average * 10) + '%' }" 
                          :aria-valuenow="currentGame[0][0].bayes_average * 10" 
                          aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">Rating from our users</div>
-                  <div class="stat-value">{{ parseFloat(currentGame[0][0].total_rating).toFixed(2) }}/10</div>
-                  <div class="progress mt-1">
-                    <div class="progress-bar bg-success" role="progressbar" 
-                         :style="{ width: (currentGame[0][0].total_rating * 10) + '%' }" 
-                         :aria-valuenow="currentGame[0][0].total_rating * 10" 
-                         aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
+                  </div>
                 </div>
                 <div class="stat-item">
                   <div class="stat-label">total Users who Rated this game</div>
@@ -180,6 +182,7 @@
                     <textarea v-model="comment" class="form-control" id="comment" rows="3"></textarea>
                   </div>
                   <button type="submit" class="btn btn-primary w-100">Submit Rating</button>
+                  <small class="text-muted">If you already rated this game, your rating will be updated.</small>
                 </form>
               </div>
               <!--
@@ -222,9 +225,10 @@
               <div class="sorting-controls d-flex align-items-center justify-content-center">
                 <label for="sortOrder" class="me-2">Sort by:</label>
                 <select id="sortOrder" v-model="order_by" class="form-select" @change="getAllData(pageNumber, pageSize)">
-                  <option value="average_rating">Average Rating</option>
+                  <option value="average_rating">Average Rating (from users)</option>
+                  <option value="bayes_average">Bayes Average (weighed average)</option>
+                  <option value="users_rated">Number of Ratings (popularity)</option>
                   <option value="yearpublished">Year Published</option>
-                  <option value="users_rated">Number of Ratings</option>
                 </select>
               </div>
             </div>
@@ -241,6 +245,7 @@
               <div class="card-header text-center bg-light">
                 <h5 class="card-title mb-0 text-truncate" :title="game.primary_name">{{ game.primary_name }}</h5>
                 <small class="text-muted">{{ game.yearpublished }}</small>
+                <p><small><b>BGG Rank:</b> #{{ game.bgg_rank }}</small></p>
               </div>
               <div class="game-thumbnail-container">
                 <img v-bind:src="game.thumbnail" alt="game thumbnail" class="game-thumbnail">
@@ -263,7 +268,11 @@
                 <div class="rating-mini mt-2">
                   <div class="rating-value" :style="{ width: (game.average_rating * 10) + '%' }"></div>
                 </div>
-                <small class="text-center text-muted">{{ parseFloat(game.average_rating).toFixed(1) }}/10</small>
+                <small class="text-center text-muted">{{ parseFloat(game.average_rating).toFixed(1) }}/10 from users</small>
+                <div class="rating-mini mt-2">
+                  <div class="rating-value" :style="{ width: (game.bayes_average * 10) + '%' }"></div>
+                </div>
+                <small class="text-center text-muted">{{ parseFloat(game.bayes_average).toFixed(1) }}/10 weighted</small>
                 <div class="mt-auto text-center pt-3">
                   <router-link :to="'/games/show/' + game.id" class="btn btn-primary w-100">
                     <i class="fas fa-info-circle me-1"></i> View Details
@@ -321,7 +330,7 @@ export default {
       pageNumber: 1,
       pageSize: 30,
       numberOfPages: 0,
-      order_by: 'average_rating',
+      order_by: 'bayes_average',
 
       gameArray: [],
       ratingsArray: [],

@@ -32,14 +32,13 @@ node server.js
 ```
 
 
-## To Do
-
-- add a table for ratings / comments with a trigger so that each time someone ranks a game, an entry in this table is added (Done?)
 
 ## Functionalities
-- See the list of board games
-- Filter the games
+- Register and login
+- See the list of board games (by pages)
+- Sort the games on demand
 - Search for a game
 - See a game's details
-- Register and login
-- Access and modify the personal informations
+- Rate a game
+- Update your rating
+- See all your ratings
