@@ -320,6 +320,9 @@ CREATE PROCEDURE add_game_rating(
     IN p_comment TEXT
 )
 BEGIN
+    -- Check if the user has already rated this game
+    DECLARE rating_exists INT;
+
     -- Declare variables for error handling
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -328,9 +331,6 @@ BEGIN
     END;
     
     START TRANSACTION;
-    
-    -- Check if the user has already rated this game
-    DECLARE rating_exists INT;
     
     SELECT COUNT(*) INTO rating_exists
     FROM game_ratings
