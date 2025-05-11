@@ -48,8 +48,12 @@
                 <h4 class="mb-0"><i class="fas fa-gamepad me-2"></i>Game Info</h4>
               </div>
               <div class="card-body">
-                <div class="row">
+                <div class="row info-item">
                   <div class="col-md-6">
+                    <div class="info-item">
+                      <div class="info-label">Designer</div>
+                      <div class="info-value">{{ currentGame[1][0].designer_name }}</div>
+                    </div>
                     <div class="info-item">
                       <div class="info-label">Players</div>
                       <div class="info-value">{{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}</div>
@@ -65,6 +69,10 @@
                   </div>
                   <div class="col-md-6">
                     <div class="info-item">
+                      <div class="info-label">Category</div>
+                      <div class="info-value">{{ currentGame[4][0].category_name }}</div>
+                    </div>
+                    <div class="info-item">
                       <div class="info-label">Year Published</div>
                       <div class="info-value">{{ currentGame[0][0].yearpublished }}</div>
                     </div>
@@ -76,6 +84,13 @@
                       <div class="info-label">Play Time Range</div>
                       <div class="info-value">{{ currentGame[0][0].minplaytime }} - {{ currentGame[0][0].maxplaytime }} min</div>
                     </div>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Families</div>
+                  <div v-for="family in currentGame[6]" :key="family.family_id" class="info-value">
+                    {{ family.family_name }},
                   </div>
                 </div>
               </div>
@@ -354,6 +369,10 @@ export default {
   methods: {
     async getAllData() {
       try {
+        if (this.searchField !== "") {
+          this.searchRequest();
+          return;
+        }
         let responseGames = await this.$http.get('http://localhost:9000/api/games/page/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
         this.gameArray = await responseGames.data;
 
