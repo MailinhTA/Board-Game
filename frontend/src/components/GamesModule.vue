@@ -283,11 +283,11 @@
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-check mb-2" v-for="(category, index) in [
-                    'WorldWarII', 'Ancient', 'Adventure', 'Civilization', 'Pirates',
-                    'FanExpansion', 'Spies/SecretAgents', 'Memory', 'KoreanWar', 'Sports',
+                    'World War II', 'Ancient', 'Adventure', 'Civilization', 'Pirates',
+                    'Fan Expansion', 'Spies/Secret Agents', 'Memory', 'Korean War', 'Sports',
                     'Negotiation', 'Maze', 'Travel', 'Wargame', 'Miniatures',
-                    'ExpansionforBase-game', 'CollectibleComponents', 'Music', 'Math', 'SpaceExploration',
-                    'Number', 'Political', 'AbstractStrategy', 'VideoGameTheme', 'Mafia',
+                    'Expansion for Base-game', 'Collectible Components', 'Music', 'Math', 'Space Exploration',
+                    'Number', 'Political', 'Abstract Strategy', 'Video Game Theme', 'Mafia',
                     'Zombies', 'Renaissance', 'Nautical'
                   ]" :key="'cat1-'+index">
                     <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
@@ -297,12 +297,12 @@
                 
                 <div class="col-md-4">
                   <div class="form-check mb-2" v-for="(category, index) in [
-                    'Deduction', 'VietnamWar', 'Murder/Mystery', 'Mature/Adult', 'CityBuilding',
-                    'Puzzle', 'AmericanRevolutionaryWar', 'AgeofReason', 'WorldWarI', 'Exploration',
-                    'Action/Dexterity', 'Economic', 'Humor', 'PikeandShot', 'Fighting',
-                    'Racing', 'Novel-based', 'GameSystem', 'Bluffing', 'Aviation/Flight',
-                    'PartyGame', 'Religious', 'Farming', 'Horror', 'Medical',
-                    'Dice', 'Book', 'AmericanCivilWar'
+                    'Deduction', 'Vietnam War', 'Murder/Mystery', 'Mature / Adult', 'City Building',
+                    'Puzzle', 'American Revolutionary War', 'Age of Reason', 'World War I', 'Exploration',
+                    'Action / Dexterity', 'Economic', 'Humor', 'Pike and Shot', 'Fighting',
+                    'Racing', 'Novel-based', 'Game System', 'Bluffing', 'Aviation / Flight',
+                    'Party Game', 'Religious', 'Farming', 'Horror', 'Medical',
+                    'Dice', 'Book', 'American Civil War'
                   ]" :key="'cat2-'+index">
                     <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
                     <label class="form-check-label" :for="'category-'+category">{{ category }}</label>
@@ -311,12 +311,12 @@
                 
                 <div class="col-md-4">
                   <div class="form-check mb-2" v-for="(category, index) in [
-                    'TerritoryBuilding', 'Industry/Manufacturing', 'Medieval', 'Fantasy', 'Trivia',
-                    'AmericanIndianWars', 'WordGame', 'CivilWar', 'Real-time', 'Transportation',
-                    'Post-Napoleonic', 'Print&Play', 'Environmental', 'Napoleonic', 'Electronic',
-                    'CardGame', 'ScienceFiction', 'Movies/TV/Radiotheme', 'Prehistoric', 'ModernWarfare',
-                    'ComicBook/Strip', 'Trains', 'Mythology', 'Animals', 'Educational',
-                    'Arabian', 'American West', 'sGam'
+                    'Territory Building', 'Industry / Manufacturing', 'Medieval', 'Fantasy', 'Trivia',
+                    'American Indian Wars', 'Word Game', 'Civil War', 'Real-time', 'Transportation',
+                    'Post-Napoleonic', 'Print & Play', 'Environmental', 'Napoleonic', 'Electronic',
+                    'Card Game', 'Science Fiction', 'Movies / TV / Radio theme', 'Prehistoric', 'Modern Warfare',
+                    'Comic Book / Strip', 'Trains', 'Mythology', 'Animals', 'Educational',
+                    'Arabian', 'American West'
                   ]" :key="'cat3-'+index">
                     <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
                     <label class="form-check-label" :for="'category-'+category">{{ category }}</label>
