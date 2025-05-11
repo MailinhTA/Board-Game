@@ -234,11 +234,11 @@
         </div>
 
         <!-- Search bar -->
-        <div class="container">
+        <div v-if="categorySearch === false" class="container">
           <div class="row height d-flex justify-content-center align-items-center">
             <div class="col-md-8">
               <div class="search">
-                <input type="text" v-model="searchField" id="searchBar" class="form-control" placeholder="Search for a book, author...">
+                <input type="text" v-model="searchField" id="searchBar" class="form-control" placeholder="Search for a Game name...">
                 <input type="button" value="Search" @click="searchRequest()" class="zoom-hover"/>
               </div>
             </div>
@@ -260,6 +260,91 @@
             </div>
           </div>
         </div>
+
+
+        <!-- button to change categorySearch to true -->
+        <div class="container mt-3">
+          <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+              <button class="btn btn-outline-primary" @click="categorySearch = !categorySearch">
+                Filter by Category
+              </button>
+            </div>
+          </div>
+        </div>
+
+        
+        <div v-if="categorySearch === true" class="container">
+
+
+          <div class="mt-4">
+            <h5 class="text-center mb-3">Select a Category</h5>
+            <div class="category-filter-container">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-check mb-2" v-for="(category, index) in [
+                    'WorldWarII', 'Ancient', 'Adventure', 'Civilization', 'Pirates',
+                    'FanExpansion', 'Spies/SecretAgents', 'Memory', 'KoreanWar', 'Sports',
+                    'Negotiation', 'Maze', 'Travel', 'Wargame', 'Miniatures',
+                    'ExpansionforBase-game', 'CollectibleComponents', 'Music', 'Math', 'SpaceExploration',
+                    'Number', 'Political', 'AbstractStrategy', 'VideoGameTheme', 'Mafia',
+                    'Zombies', 'Renaissance', 'Nautical'
+                  ]" :key="'cat1-'+index">
+                    <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
+                    <label class="form-check-label" :for="'category-'+category">{{ category }}</label>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="form-check mb-2" v-for="(category, index) in [
+                    'Deduction', 'VietnamWar', 'Murder/Mystery', 'Mature/Adult', 'CityBuilding',
+                    'Puzzle', 'AmericanRevolutionaryWar', 'AgeofReason', 'WorldWarI', 'Exploration',
+                    'Action/Dexterity', 'Economic', 'Humor', 'PikeandShot', 'Fighting',
+                    'Racing', 'Novel-based', 'GameSystem', 'Bluffing', 'Aviation/Flight',
+                    'PartyGame', 'Religious', 'Farming', 'Horror', 'Medical',
+                    'Dice', 'Book', 'AmericanCivilWar'
+                  ]" :key="'cat2-'+index">
+                    <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
+                    <label class="form-check-label" :for="'category-'+category">{{ category }}</label>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="form-check mb-2" v-for="(category, index) in [
+                    'TerritoryBuilding', 'Industry/Manufacturing', 'Medieval', 'Fantasy', 'Trivia',
+                    'AmericanIndianWars', 'WordGame', 'CivilWar', 'Real-time', 'Transportation',
+                    'Post-Napoleonic', 'Print&Play', 'Environmental', 'Napoleonic', 'Electronic',
+                    'CardGame', 'ScienceFiction', 'Movies/TV/Radiotheme', 'Prehistoric', 'ModernWarfare',
+                    'ComicBook/Strip', 'Trains', 'Mythology', 'Animals', 'Educational',
+                    'Arabian', 'American West', 'sGam'
+                  ]" :key="'cat3-'+index">
+                    <input class="form-check-input" type="radio" v-model="categoryFilter" :value="category" :id="'category-'+category">
+                    <label class="form-check-label" :for="'category-'+category">{{ category }}</label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row mt-3">
+                <div class="col-12 text-center">
+                  <button class="btn btn-primary me-2" @click="searchRequestCategory()">Search by Category</button>
+                  <button class="btn btn-secondary" @click="categoryFilter = ''; getAllData()">Clear Filter</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
 
 
       </div>
@@ -359,6 +444,9 @@ export default {
       order_by: 'bayes_average',
       searchField: '',
 
+      categoryFilter: '',
+      categorySearch: false,
+
       gameArray: [],
       ratingsArray: [],
 
@@ -389,6 +477,23 @@ export default {
         let searchFieldEncoded = encodeURIComponent(this.searchField);
         if (this.searchField !== "") {
           let responseGames = await this.$http.get('http://localhost:9000/api/games/search/' + searchFieldEncoded + '/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
+          this.gameArray = await responseGames.data;
+
+          this.numberOfPages = "?";
+        }
+        else {
+          this.getAllData();
+        }
+      } catch (exception) {
+        console.log(exception);
+      }
+    },
+
+    async searchRequestCategory() {
+      try {
+        let searchFieldEncoded = encodeURIComponent(this.categoryFilter);
+        if (this.categoryFilter !== "") {
+          let responseGames = await this.$http.get('http://localhost:9000/api/games/category/' + searchFieldEncoded + '/' + this.pageNumber + '/' + this.pageSize + '/' + this.order_by);
           this.gameArray = await responseGames.data;
 
           this.numberOfPages = "?";
@@ -481,7 +586,14 @@ export default {
 
     pageSize: function(newPageSize, oldPageSize) {
       this.getAllData();
-    }
+    },
+
+    categorySearch: function(newCategorySearch, oldCategorySearch) {
+      if (newCategorySearch === false) {
+        this.categoryFilter = '';
+        this.getAllData();
+      }
+    },
   },
 
   created() {
