@@ -71,6 +71,19 @@ module.exports = {
         }
     },
 
+    async getCategoryGamePage(category, page, pageSize, sort) {
+        try {
+            let sql = "CALL get_games_by_category(?, ?, ?, ?)";
+            const [rows, fields] = await pool.execute(sql, [category, page, pageSize, sort]);
+            console.log("Games FETCHED: " + rows[0].length);
+            return rows[0];
+            
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
     async getTotalGames() {
         try {
             let sql = "SELECT get_total_games()";
