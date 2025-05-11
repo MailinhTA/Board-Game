@@ -48,6 +48,7 @@ CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) NOT NULL UNIQUE
 );
+-- 85 categories: WorldWarII, Ancient, Adventure, Civilization, Pirates, FanExpansion, Spies/SecretAgents, Memory, KoreanWar, Sports, Negotiation, Maze, Travel, Wargame, Miniatures, ExpansionforBase-game, CollectibleComponents, Music, Math, SpaceExploration, Number, Political, AbstractStrategy, VideoGameTheme, Mafia, Zombies, Renaissance, Nautical, Deduction, VietnamWar, Murder/Mystery, Mature/Adult, CityBuilding, Puzzle, AmericanRevolutionaryWar, AgeofReason, WorldWarI, Exploration, Action/Dexterity, Economic, Humor, PikeandShot, Fighting, Racing, Novel-based, GameSystem, Bluffing, Aviation/Flight, sGam, PartyGame, Religious, Farming, Horror, Medical, Dice, Book, AmericanCivilWar, TerritoryBuilding, Industry/Manufacturing, Medieval, Fantasy, Trivia, AmericanIndianWars, WordGame, CivilWar, Real-time, Transportation, Post-Napoleonic, Print&Play, Environmental, Napoleonic, Electronic, CardGame, ScienceFiction, Movies/TV/Radiotheme, Prehistoric, ModernWarfare, ComicBook/Strip, Trains, Mythology, Animals, Educational, Arabian, American West.
 
 -- Create a table for mechanics
 CREATE TABLE mechanics (
