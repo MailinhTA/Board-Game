@@ -501,6 +501,98 @@ DELIMITER ;
 
 
 
+-- Stored procedure to get games filtered by category with pagination and sorting
+DROP PROCEDURE IF EXISTS get_games_by_category;
+DELIMITER //
+
+CREATE PROCEDURE get_games_by_category(
+    IN p_category_name VARCHAR(50),
+    IN page_num INT, 
+    IN items_per_page INT,
+    IN sort_by VARCHAR(20) -- Options: 'id', 'yearpublished', 'average_rating', 'users_rated', 'bayes_average', 'bgg_rank'
+)
+BEGIN
+    DECLARE offset_val INT;
+    SET offset_val = (page_num - 1) * items_per_page;
+    
+    -- Set default sorting if NULL or invalid value provided
+    IF sort_by IS NULL OR sort_by NOT IN ('id', 'yearpublished', 'average_rating', 'bayes_average', 'bgg_rank', 'users_rated') THEN
+        SET sort_by = 'id';
+    END IF;
+    
+    -- Dynamic sorting based on parameter with category filter
+    CASE sort_by
+        WHEN 'yearpublished' THEN
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.yearpublished DESC, g.id
+            LIMIT offset_val, items_per_page;
+        WHEN 'average_rating' THEN
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.average_rating DESC, g.id
+            LIMIT offset_val, items_per_page;
+        WHEN 'users_rated' THEN
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.users_rated DESC, g.id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bayes_average' THEN
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.bayes_average DESC, g.id
+            LIMIT offset_val, items_per_page;
+        WHEN 'bgg_rank' THEN
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.bgg_rank ASC, g.id
+            LIMIT offset_val, items_per_page;
+        ELSE
+            -- Default is sorting by id
+            SELECT g.* FROM games g
+            JOIN game_categories gc ON g.id = gc.game_id
+            JOIN categories c ON gc.category_id = c.category_id
+            WHERE c.category_name = p_category_name
+            ORDER BY g.id
+            LIMIT offset_val, items_per_page;
+    END CASE;
+    
+    -- Return total count for pagination
+    SELECT COUNT(DISTINCT g.id) AS total_games
+    FROM games g
+    JOIN game_categories gc ON g.id = gc.game_id
+    JOIN categories c ON gc.category_id = c.category_id
+    WHERE c.category_name = p_category_name;
+END //
+
+DELIMITER ;
+
+-- CALL get_games_by_category('Fantasy', 1, 10, 'average_rating'); -- Example usage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ############################################################################
 ########################### FUNCTIONS ######################################
 ############################################################################
