@@ -70,7 +70,11 @@
                   <div class="col-md-6">
                     <div class="info-item">
                       <div class="info-label">Category</div>
-                      <div class="info-value">{{ currentGame[4][0].category_name }}</div>
+                        <div class="info-value">
+                        <a href="#" @click.prevent="() => { categorySearch = true; categoryFilter = currentGame[4][0].category_name; $router.push('/games/list/all'); searchRequestCategory(); }">
+                          {{ currentGame[4][0].category_name }}
+                        </a>
+                        </div>
                     </div>
                     <div class="info-item">
                       <div class="info-label">Year Published</div>
