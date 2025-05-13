@@ -264,7 +264,7 @@ BEGIN
     -- Get the basic game information
     SELECT g.*, game_total_rating(game_id) AS total_rating FROM games g WHERE g.id = game_id;
     
-    -- Get designers
+    -- Get designer
     SELECT d.designer_id, d.designer_name 
     FROM designers d 
     JOIN game_designers gd ON d.designer_id = gd.designer_id 
@@ -282,7 +282,7 @@ BEGIN
     JOIN game_publishers gp ON p.publisher_id = gp.publisher_id 
     WHERE gp.game_id = game_id;
     
-    -- Get categories
+    -- Get category
     SELECT c.category_id, c.category_name 
     FROM categories c 
     JOIN game_categories gc ON c.category_id = gc.category_id 
