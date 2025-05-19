@@ -3,229 +3,233 @@
 
     <div v-if="action === 'show'" class="game-details-container">
       <div class="game-header">
-        <div class="container">
-          <div class="row align-items-center py-4">
-            <div class="col-md-3 text-center">
-              <img v-bind:src="currentGame[0][0].thumbnail" alt="game thumbnail" class="game-cover-image shadow">
-            </div>
-            <div class="col-md-9">
-              <h1 class="game-title">{{ currentGame[0][0].primary_name }}</h1>
-              <div class="game-year">{{ currentGame[0][0].yearpublished }}</div>
-              <div class="game-meta mt-3">
-                <span class="badge bg-primary me-2">Players: {{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}</span>
-                <span class="badge bg-success me-2">Age: {{ currentGame[0][0].minage }}+</span>
-                <span class="badge bg-info me-2">Time: {{ currentGame[0][0].minplaytime }}-{{ currentGame[0][0].maxplaytime }} min</span>
-                <span class="badge bg-warning text-dark">BGG Rank: #{{ currentGame[0][0].bgg_rank }}</span>
-              </div>
-              <div class="rating-container mt-3">
-                <div class="rating-stars">
-                  <div class="rating-value" :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }"></div>
-                </div>
-                <div class="rating-text">{{ parseFloat(currentGame[0][0].average_rating).toFixed(1) }}/10 
-                  <small class="text-muted">({{ currentGame[0][0].users_rated }} ratings)</small>
-                </div>
-              </div>
-            </div>
+      <div class="container">
+        <div class="row align-items-center py-4">
+        <div class="col-md-3 text-center">
+          <img v-bind:src="currentGame[0] && currentGame[0][0] ? currentGame[0][0].thumbnail : ''" alt="game thumbnail" class="game-cover-image shadow">
+        </div>
+        <div class="col-md-9">
+          <h1 class="game-title">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].primary_name : 'Game name not available' }}</h1>
+          <div class="game-year">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].yearpublished : 'Year not available' }}</div>
+          <div class="game-meta mt-3">
+          <span class="badge bg-primary me-2">Players: {{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minplayers} - ${currentGame[0][0].maxplayers}` : 'N/A' }}</span>
+          <span class="badge bg-success me-2">Age: {{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minage}+` : 'N/A' }}</span>
+          <span class="badge bg-info me-2">Time: {{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minplaytime}-${currentGame[0][0].maxplaytime} min` : 'N/A' }}</span>
+          <span class="badge bg-warning text-dark">BGG Rank: {{ currentGame[0] && currentGame[0][0] ? `#${currentGame[0][0].bgg_rank}` : 'N/A' }}</span>
+          </div>
+          <div class="rating-container mt-3">
+          <div class="rating-stars">
+            <div class="rating-value" :style="{ width: (currentGame[0] && currentGame[0][0] ? currentGame[0][0].average_rating * 10 : 0) + '%' }"></div>
+          </div>
+          <div class="rating-text">{{ currentGame[0] && currentGame[0][0] ? parseFloat(currentGame[0][0].average_rating).toFixed(1) : '0' }}/10 
+            <small class="text-muted">({{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].users_rated : '0' }} ratings)</small>
+          </div>
           </div>
         </div>
+        </div>
+      </div>
       </div>
 
       <div class="container mt-4">
-        <div class="row">
-          <!-- Main content column -->
-          <div class="col-lg-8">
-            <div class="card mb-4 shadow-sm">
-              <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-book me-2"></i>Description</h4>
-              </div>
-              <div class="card-body">
-                <p class="game-description">{{ currentGame[0][0].description }}</p>
+      <div class="row">
+        <!-- Main content column -->
+        <div class="col-lg-8">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-white">
+          <h4 class="mb-0"><i class="fas fa-book me-2"></i>Description</h4>
+          </div>
+          <div class="card-body">
+          <p class="game-description">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].description : 'No description available' }}</p>
+          </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-white">
+          <h4 class="mb-0"><i class="fas fa-gamepad me-2"></i>Game Info</h4>
+          </div>
+          <div class="card-body">
+          <div class="row info-item">
+            <div class="col-md-6">
+            <div class="info-item">
+              <div class="info-label">Designer</div>
+              <div class="info-value">{{ currentGame[1] && currentGame[1][0] ? currentGame[1][0].designer_name : 'Unknown designer' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Players</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minplayers} - ${currentGame[0][0].maxplayers}` : 'N/A' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Playing Time</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].playingtime} minutes` : 'N/A' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Age</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minage}+` : 'N/A' }}</div>
+            </div>
+            </div>
+            <div class="col-md-6">
+            <div class="info-item">
+              <div class="info-label">Category</div>
+              <div class="info-value">
+              <a v-if="currentGame[4] && currentGame[4][0]" href="#" @click.prevent="() => { categorySearch = true; categoryFilter = currentGame[4][0].category_name; $router.push('/games/list/all'); searchRequestCategory(); }">
+                {{ currentGame[4][0].category_name }}
+              </a>
+              <span v-else>No category available</span>
               </div>
             </div>
-
-            <div class="card mb-4 shadow-sm">
-              <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-gamepad me-2"></i>Game Info</h4>
-              </div>
-              <div class="card-body">
-                <div class="row info-item">
-                  <div class="col-md-6">
-                    <div class="info-item">
-                      <div class="info-label">Designer</div>
-                      <div class="info-value">{{ currentGame[1][0].designer_name }}</div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">Players</div>
-                      <div class="info-value">{{ currentGame[0][0].minplayers }} - {{ currentGame[0][0].maxplayers }}</div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">Playing Time</div>
-                      <div class="info-value">{{ currentGame[0][0].playingtime }} minutes</div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">Age</div>
-                      <div class="info-value">{{ currentGame[0][0].minage }}+</div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="info-item">
-                      <div class="info-label">Category</div>
-                        <div class="info-value">
-                        <a href="#" @click.prevent="() => { categorySearch = true; categoryFilter = currentGame[4][0].category_name; $router.push('/games/list/all'); searchRequestCategory(); }">
-                          {{ currentGame[4][0].category_name }}
-                        </a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">Year Published</div>
-                      <div class="info-value">{{ currentGame[0][0].yearpublished }}</div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">BGG ID</div>
-                      <div class="info-value">{{ currentGame[0][0].id }}</div>
-                    </div>
-                    <div class="info-item">
-                      <div class="info-label">Play Time Range</div>
-                      <div class="info-value">{{ currentGame[0][0].minplaytime }} - {{ currentGame[0][0].maxplaytime }} min</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="info-item">
-                  <div class="info-label">Families</div>
-                  <div v-for="family in currentGame[6]" :key="family.family_id" class="info-value">
-                    {{ family.family_name }},
-                  </div>
-                </div>
-              </div>
+            <div class="info-item">
+              <div class="info-label">Year Published</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].yearpublished : 'N/A' }}</div>
             </div>
-
-
-        <!-- Recent Ratings Section -->
-        <div class="row mt-5">
-          <div class="col-12">
-            <div class="card shadow-sm">
-              <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Recent Ratings</h4>
-              </div>
-              <div class="card-body">
-                <div v-if="ratingsArray.length === 0" class="text-center py-4">
-                  <p class="text-muted">No ratings yet. Be the first to rate this game!</p>
-                </div>
-                <div v-else>
-                  <div class="rating-item mb-3 pb-3 border-bottom" v-for="(rating, index) in ratingsArray" :key="rating.rating_id">
-                    <div class="d-flex justify-content-between align-items-start">
-                      <div>
-                        <h5 class="mb-1">{{ rating.user_name }}</h5>
-                        <div class="text-muted small">{{ rating.rating_date }}</div>
-                      </div>
-                      <div class="rating-badge">
-                        <span class="badge bg-primary">{{ parseFloat(rating.rating).toFixed(1) }}/10</span>
-                      </div>
-                    </div>
-                    <p class="mt-2 mb-0"><b>" </b>{{ rating.rating_comment }}<b> "</b></p>
-                  </div>
-                </div>
-              </div>
+            <div class="info-item">
+              <div class="info-label">BGG ID</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].id : 'N/A' }}</div>
             </div>
+            <div class="info-item">
+              <div class="info-label">Play Time Range</div>
+              <div class="info-value">{{ currentGame[0] && currentGame[0][0] ? `${currentGame[0][0].minplaytime} - ${currentGame[0][0].maxplaytime} min` : 'N/A' }}</div>
+            </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Families</div>
+            <div v-if="currentGame[6] && currentGame[6].length > 0">
+            <div v-for="family in currentGame[6]" :key="family.family_id" class="info-value">
+              {{ family.family_name }},
+            </div>
+            </div>
+            <div v-else class="info-value">No families available</div>
+          </div>
           </div>
         </div>
 
 
-
+      <!-- Recent Ratings Section -->
+      <div class="row mt-5">
+        <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+          <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Recent Ratings</h4>
           </div>
-
-          <!-- Sidebar column -->
-          <div class="col-lg-4">
-            <div class="card mb-4 shadow-sm">
-              <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Rankings & Stats</h4>
+          <div class="card-body">
+          <div v-if="!ratingsArray || ratingsArray.length === 0" class="text-center py-4">
+            <p class="text-muted">No ratings yet. Be the first to rate this game!</p>
+          </div>
+          <div v-else>
+            <div class="rating-item mb-3 pb-3 border-bottom" v-for="(rating, index) in ratingsArray" :key="rating.rating_id">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+              <h5 class="mb-1">{{ rating.user_name || 'Anonymous' }}</h5>
+              <div class="text-muted small">{{ rating.rating_date || 'Date not available' }}</div>
               </div>
-              <div class="card-body">
-                <div class="stat-item">
-                  <div class="stat-label">BGG Rank</div>
-                  <div class="stat-value">#{{ currentGame[0][0].bgg_rank }}</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">Average Rating</div>
-                  <div class="stat-value">{{ parseFloat(currentGame[0][0].average_rating).toFixed(2) }}/10</div>
-                  <div class="progress mt-1">
-                    <div class="progress-bar bg-success" role="progressbar" 
-                         :style="{ width: (currentGame[0][0].average_rating * 10) + '%' }" 
-                         :aria-valuenow="currentGame[0][0].average_rating * 10" 
-                         aria-valuemin="0" aria-valuemax="100">
-                    </div>
-                  </div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">Rating from our users</div>
-                  <div class="stat-value">{{ parseFloat(currentGame[0][0].total_rating).toFixed(2) }}/10</div>
-                  <div class="progress mt-1">
-                    <div class="progress-bar bg-warning" role="progressbar" 
-                         :style="{ width: (currentGame[0][0].total_rating * 10) + '%' }" 
-                         :aria-valuenow="currentGame[0][0].total_rating * 10" 
-                         aria-valuemin="0" aria-valuemax="100">
-                    </div>
-                  </div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">Bayes Average</div>
-                  <div class="stat-value">{{ parseFloat(currentGame[0][0].bayes_average).toFixed(2) }}/10</div>
-                  <div class="progress mt-1">
-                    <div class="progress-bar bg-info" role="progressbar" 
-                         :style="{ width: (currentGame[0][0].bayes_average * 10) + '%' }" 
-                         :aria-valuenow="currentGame[0][0].bayes_average * 10" 
-                         aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">total Users who Rated this game</div>
-                  <div class="stat-value">{{ currentGame[0][0].users_rated }}</div>
-                </div>
+              <div class="rating-badge">
+              <span class="badge bg-primary">{{ rating.rating ? parseFloat(rating.rating).toFixed(1) : '0' }}/10</span>
               </div>
             </div>
-
-            <div class="card mb-4 shadow-sm">
-              <div class="card-header bg-white">
-                <h4 class="mb-0"><i class="fas fa-link me-2"></i>Rate this game!</h4>
-                <small class="text-muted"> (You must be logged in)</small>
-              </div>
-              <div class="card-body">
-                <form @submit.prevent="addRating(rating, comment)">
-                  <div class="mb-3">
-                    <label for="rating" class="form-label">Your Rating<small class="text-muted"> (1-10)</small></label>
-                    <input type="number" v-model="rating" min="1" max="10" step="0.1" class="form-control" id="rating" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="comment" class="form-label">Your Comment</label>
-                    <textarea v-model="comment" class="form-control" id="comment" rows="3"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary w-100">Submit Rating</button>
-                  <small class="text-muted">If you already rated this game, your rating will be updated.</small>
-                </form>
-              </div>
-              <!--
-              <div class="card-body">
-                <a href="#" class="btn btn-outline-primary btn-block mb-2 w-100">
-                  <i class="fas fa-heart me-2"></i>Add to Wishlist
-                </a>
-                <a href="#" class="btn btn-outline-success btn-block mb-2 w-100">
-                  <i class="fas fa-plus-circle me-2"></i>Mark as Owned
-                </a>
-                <a href="#" class="btn btn-outline-info btn-block w-100">
-                  <i class="fas fa-external-link-alt me-2"></i>View on BGG
-                </a>
-              </div>
-              -->
+            <p class="mt-2 mb-0"><b>" </b>{{ rating.rating_comment || 'No comment provided' }}<b> "</b></p>
             </div>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+
+
+        </div>
+
+        <!-- Sidebar column -->
+        <div class="col-lg-4">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-white">
+          <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Rankings & Stats</h4>
+          </div>
+          <div class="card-body">
+          <div class="stat-item">
+            <div class="stat-label">BGG Rank</div>
+            <div class="stat-value">{{ currentGame[0] && currentGame[0][0] ? `#${currentGame[0][0].bgg_rank}` : 'N/A' }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Average Rating</div>
+            <div class="stat-value">{{ currentGame[0] && currentGame[0][0] ? parseFloat(currentGame[0][0].average_rating).toFixed(2) : '0' }}/10</div>
+            <div class="progress mt-1">
+            <div class="progress-bar bg-success" role="progressbar" 
+               :style="{ width: (currentGame[0] && currentGame[0][0] ? currentGame[0][0].average_rating * 10 : 0) + '%' }" 
+               :aria-valuenow="currentGame[0] && currentGame[0][0] ? currentGame[0][0].average_rating * 10 : 0" 
+               aria-valuemin="0" aria-valuemax="100">
+            </div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Rating from our users</div>
+            <div class="stat-value">{{ currentGame[0] && currentGame[0][0] ? parseFloat(currentGame[0][0].total_rating).toFixed(2) : '0' }}/10</div>
+            <div class="progress mt-1">
+            <div class="progress-bar bg-warning" role="progressbar" 
+               :style="{ width: (currentGame[0] && currentGame[0][0] ? currentGame[0][0].total_rating * 10 : 0) + '%' }" 
+               :aria-valuenow="currentGame[0] && currentGame[0][0] ? currentGame[0][0].total_rating * 10 : 0" 
+               aria-valuemin="0" aria-valuemax="100">
+            </div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Bayes Average</div>
+            <div class="stat-value">{{ currentGame[0] && currentGame[0][0] ? parseFloat(currentGame[0][0].bayes_average).toFixed(2) : '0' }}/10</div>
+            <div class="progress mt-1">
+            <div class="progress-bar bg-info" role="progressbar" 
+               :style="{ width: (currentGame[0] && currentGame[0][0] ? currentGame[0][0].bayes_average * 10 : 0) + '%' }" 
+               :aria-valuenow="currentGame[0] && currentGame[0][0] ? currentGame[0][0].bayes_average * 10 : 0" 
+               aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">total Users who Rated this game</div>
+            <div class="stat-value">{{ currentGame[0] && currentGame[0][0] ? currentGame[0][0].users_rated : '0' }}</div>
+          </div>
           </div>
         </div>
 
-        <div class="mt-4 text-center">
-          <a href="/#/games/list/all" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Back to Games List
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-white">
+          <h4 class="mb-0"><i class="fas fa-link me-2"></i>Rate this game!</h4>
+          <small class="text-muted"> (You must be logged in)</small>
+          </div>
+          <div class="card-body">
+          <form @submit.prevent="addRating(rating, comment)">
+            <div class="mb-3">
+            <label for="rating" class="form-label">Your Rating<small class="text-muted"> (1-10)</small></label>
+            <input type="number" v-model="rating" min="1" max="10" step="0.1" class="form-control" id="rating" required>
+            </div>
+            <div class="mb-3">
+            <label for="comment" class="form-label">Your Comment</label>
+            <textarea v-model="comment" class="form-control" id="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit Rating</button>
+            <small class="text-muted">If you already rated this game, your rating will be updated.</small>
+          </form>
+          </div>
+          <!--
+          <div class="card-body">
+          <a href="#" class="btn btn-outline-primary btn-block mb-2 w-100">
+            <i class="fas fa-heart me-2"></i>Add to Wishlist
           </a>
+          <a href="#" class="btn btn-outline-success btn-block mb-2 w-100">
+            <i class="fas fa-plus-circle me-2"></i>Mark as Owned
+          </a>
+          <a href="#" class="btn btn-outline-info btn-block w-100">
+            <i class="fas fa-external-link-alt me-2"></i>View on BGG
+          </a>
+          </div>
+          -->
         </div>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="/#/games/list/all" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Games List
+        </a>
+      </div>
       </div>
     </div>
 
